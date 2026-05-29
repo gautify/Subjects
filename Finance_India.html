@@ -151,6 +151,105 @@ input[type=range]{width:100%;accent-color:var(--ac);cursor:pointer}
 .coming .ci{font-size:48px;margin-bottom:12px}.coming h2{font-size:16px;color:#2A2A40;margin:0 0 6px;border:none}.coming p{font-size:13px;color:#1A1A2C}
 
 @media(max-width:600px){.g2,.g3,.g4{grid-template-columns:1fr}.tr-f{display:none}#sc-wrap{grid-template-columns:1fr}}
+
+/* ========== MOBILE RESPONSIVE PATCH ========== */
+@media (max-width: 768px) {
+
+  /* Prevent horizontal overflow on the whole page */
+  body, html {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  /* Fix any fixed-width containers */
+  .container, .content, .main, [class*="wrapper"], [class*="panel"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 8px !important;
+    box-sizing: border-box;
+  }
+
+  /* Make tab bars scroll horizontally instead of overflowing */
+  .tabs, .tab-bar, .tab-nav, [class*="tab-container"], [class*="tabs"] {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    gap: 4px;
+    padding-bottom: 4px;
+  }
+
+  /* Tab buttons — shrink but keep tappable */
+  .tab, .tab-btn, [class*="tab-button"], [class*="tabBtn"] {
+    flex-shrink: 0 !important;
+    font-size: 12px !important;
+    padding: 6px 10px !important;
+    white-space: nowrap;
+  }
+
+  /* Pill sub-tabs — same treatment */
+  .pills, .pill-nav, [class*="pill-container"], [class*="pills"] {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 4px;
+    overflow-x: auto !important;
+  }
+
+  .pill, [class*="pill-btn"], [class*="pillBtn"] {
+    flex-shrink: 0 !important;
+    font-size: 11px !important;
+    padding: 4px 8px !important;
+    white-space: nowrap;
+  }
+
+  /* Tables — make them scroll horizontally */
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+  }
+
+  /* Cards and grid layouts — stack vertically */
+  .grid, .card-grid, [class*="grid-"], [class*="-grid"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  .card, [class*="card-"], [class*="-card"] {
+    width: 100% !important;
+    margin: 4px 0 !important;
+  }
+
+  /* Calculators and input rows — stack labels and inputs */
+  .calc-row, .input-row, [class*="calc-"], [class*="input-row"] {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  input, select, textarea {
+    width: 100% !important;
+    box-sizing: border-box;
+    font-size: 16px !important; /* prevents iOS auto-zoom on focus */
+  }
+
+  /* Modals/overlays — full screen on mobile */
+  .modal, .overlay, [class*="modal-"], [class*="-modal"] {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    left: 2.5vw !important;
+    top: 5vh !important;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  /* Reduce heading sizes */
+  h1 { font-size: 1.4rem !important; }
+  h2 { font-size: 1.2rem !important; }
+  h3 { font-size: 1rem !important; }
+}
+/* ========== END MOBILE PATCH ========== */
+
 </style>
 </head>
 <body>
