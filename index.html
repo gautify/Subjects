@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Hubs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0e;
+    --bg-card: #1a1a1e;
+    --bg-card-hover: #1f1f24;
+    --border: rgba(255,255,255,0.07);
+    --text: #e8e6e0;
+    --text-muted: #6b6a66;
+    --text-dim: #3a3a38;
+    --mono: 'DM Mono', monospace;
+    --display: 'Syne', sans-serif;
+  }
+
+  html { background: var(--bg); }
+  body {
+    font-family: var(--display);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0 1.5rem;
+    overflow-x: hidden;
+  }
+
+  .noise {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 128px 128px;
+  }
+
+  .page {
+    position: relative; z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 5rem 0 6rem;
+  }
+
+  header { margin-bottom: 4rem; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 20px; height: 1px;
+    background: var(--text-muted);
+  }
+
+  h1 {
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--text);
+  }
+  h1 span { color: var(--text-muted); }
+
+  .subtitle {
+    margin-top: 1rem;
+    font-size: 14px;
+    color: var(--text-muted);
+    font-family: var(--mono);
+    max-width: 460px;
+    line-height: 1.65;
+  }
+
+  .hub-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .hub-card {
+    background: var(--bg-card);
+    padding: 1.6rem 1.4rem;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: background 0.18s ease, transform 0.18s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .hub-card:hover {
+    background: var(--bg-card-hover);
+    transform: translateY(-1px);
+  }
+  .hub-card:hover .arrow { opacity: 1; transform: translate(2px, -2px); }
+
+  .card-accent {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 2px;
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .card-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .arrow {
+    font-family: var(--mono);
+    font-size: 16px;
+    color: var(--text-muted);
+    opacity: 0;
+    transition: opacity 0.18s, transform 0.18s;
+    transform: translate(0, 0);
+  }
+
+  .card-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .card-title {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    line-height: 1.2;
+    margin-top: 3px;
+  }
+
+  .card-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: var(--mono);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .card-tags {
+    display: flex; flex-wrap: wrap; gap: 5px;
+  }
+  .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.04);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-text {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+  .footer-dot {
+    display: inline-block;
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: var(--text-dim);
+    margin: 0 7px;
+    vertical-align: middle;
+  }
+
+  @media (max-width: 600px) {
+    .page { padding: 3rem 0 4rem; }
+    h1 { font-size: 2rem; }
+    .hub-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="noise" aria-hidden="true"></div>
+
+<div class="page">
+  <header>
+    <p class="eyebrow">Knowledge Repository</p>
+    <h1>The <span>Hub</span><br>Collection</h1>
+    <p class="subtitle">Structured reference tools across business, finance, and analytical disciplines.</p>
+  </header>
+
+  <div class="hub-grid">
+
+    <a class="hub-card" href="Finance_India.html">
+      <div class="card-accent" style="background:#c9a86c;"></div>
+      <div class="card-top">
+        <div class="card-icon" style="background:rgba(201,168,108,0.1);color:#c9a86c;">₹</div>
+        <span class="arrow">↗</span>
+      </div>
+      <div>
+        <p class="card-label">Finance</p>
+        <p class="card-title">Finance Hub</p>
+      </div>
+      <p class="card-desc">Valuation, financial modeling, ratios, DCF, capital structure and more.</p>
+      <div class="card-tags">
+        <span class="tag">Valuation</span>
+        <span class="tag">Ratios</span>
+        <span class="tag">DCF</span>
+        <span class="tag">Modeling</span>
+      </div>
+    </a>
+
+    <a class="hub-card" href="MarketingResearchHub.html">
+      <div class="card-accent" style="background:#b87a7a;"></div>
+      <div class="card-top">
+        <div class="card-icon" style="background:rgba(184,122,122,0.1);color:#b87a7a;">◎</div>
+        <span class="arrow">↗</span>
+      </div>
+      <div>
+        <p class="card-label">Research</p>
+        <p class="card-title">Marketing Research Hub</p>
+      </div>
+      <p class="card-desc">Research design, sampling, survey methods, data analysis and consumer insights.</p>
+      <div class="card-tags">
+        <span class="tag">VOC</span>
+        <span class="tag">Sampling</span>
+        <span class="tag">Quant</span>
+        <span class="tag">Qual</span>
+      </div>
+    </a>
+
+    <a class="hub-card" href="#">
+      <div class="card-accent" style="background:#7ab8a0;"></div>
+      <div class="card-top">
+        <div class="card-icon" style="background:rgba(122,184,160,0.1);color:#7ab8a0;">∿</div>
+        <span class="arrow">↗</span>
+      </div>
+      <div>
+        <p class="card-label">Macro · Micro</p>
+        <p class="card-title">Economics Hub</p>
+      </div>
+      <p class="card-desc">Macro and micro foundations, market structures, elasticity, policy frameworks.</p>
+      <div class="card-tags">
+        <span class="tag">Macro</span>
+        <span class="tag">Micro</span>
+        <span class="tag">Markets</span>
+      </div>
+    </a>
+
+    <a class="hub-card" href="#">
+      <div class="card-accent" style="background:#a07ab8;"></div>
+      <div class="card-top">
+        <div class="card-icon" style="background:rgba(160,122,184,0.1);color:#a07ab8;">⊕</div>
+        <span class="arrow">↗</span>
+      </div>
+      <div>
+        <p class="card-label">Corporate Finance</p>
+        <p class="card-title">M&amp;A Hub</p>
+      </div>
+      <p class="card-desc">Deal structures, synergies, due diligence, accretion/dilution, LBO fundamentals.</p>
+      <div class="card-tags">
+        <span class="tag">Synergies</span>
+        <span class="tag">LBO</span>
+        <span class="tag">Due Diligence</span>
+      </div>
+    </a>
+
+    <a class="hub-card" href="#">
+      <div class="card-accent" style="background:#7a9eb8;"></div>
+      <div class="card-top">
+        <div class="card-icon" style="background:rgba(122,158,184,0.1);color:#7a9eb8;">σ</div>
+        <span class="arrow">↗</span>
+      </div>
+      <div>
+        <p class="card-label">Analytics</p>
+        <p class="card-title">Probability &amp; Statistics Hub</p>
+      </div>
+      <p class="card-desc">Distributions, hypothesis testing, regression, Bayesian reasoning, Six Sigma metrics.</p>
+      <div class="card-tags">
+        <span class="tag">Distributions</span>
+        <span class="tag">Regression</span>
+        <span class="tag">Hypothesis</span>
+      </div>
+    </a>
+
+    <a class="hub-card" href="#">
+      <div class="card-accent" style="background:#b8a07a;"></div>
+      <div class="card-top">
+        <div class="card-icon" style="background:rgba(184,160,122,0.1);color:#b8a07a;">◈</div>
+        <span class="arrow">↗</span>
+      </div>
+      <div>
+        <p class="card-label">Strategy</p>
+        <p class="card-title">Marketing Hub</p>
+      </div>
+      <p class="card-desc">STP, 4Ps, brand management, digital marketing, campaign frameworks, CLV.</p>
+      <div class="card-tags">
+        <span class="tag">STP</span>
+        <span class="tag">Branding</span>
+        <span class="tag">Digital</span>
+      </div>
+    </a>
+
+    <a class="hub-card" href="#">
+      <div class="card-accent" style="background:#7ab88a;"></div>
+      <div class="card-top">
+        <div class="card-icon" style="background:rgba(122,184,138,0.1);color:#7ab88a;">⬡</div>
+        <span class="arrow">↗</span>
+      </div>
+      <div>
+        <p class="card-label">Process</p>
+        <p class="card-title">Operations Hub</p>
+      </div>
+      <p class="card-desc">Supply chain, DMAIC, lean principles, process capability, queuing theory.</p>
+      <div class="card-tags">
+        <span class="tag">Lean</span>
+        <span class="tag">DMAIC</span>
+        <span class="tag">SCM</span>
+      </div>
+    </a>
+
+    <a class="hub-card" href="#">
+      <div class="card-accent" style="background:#b88aae;"></div>
+      <div class="card-top">
+        <div class="card-icon" style="background:rgba(184,138,174,0.1);color:#b88aae;">⬙</div>
+        <span class="arrow">↗</span>
+      </div>
+      <div>
+        <p class="card-label">Management</p>
+        <p class="card-title">Product Hub</p>
+      </div>
+      <p class="card-desc">Product strategy, roadmaps, prioritization frameworks, metrics, go-to-market.</p>
+      <div class="card-tags">
+        <span class="tag">Roadmap</span>
+        <span class="tag">GTM</span>
+        <span class="tag">Metrics</span>
+        <span class="tag">Prioritization</span>
+      </div>
+    </a>
+
+  </div>
+
+  <footer>
+    <span class="footer-text">Knowledge Hubs</span>
+    <span class="footer-text">
+      2 active<span class="footer-dot"></span>6 in progress
+    </span>
+  </footer>
+</div>
+</body>
+</html>
