@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Hubs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:            #0a0a0b;
+  --bg-card:       #111114;
+  --bg-card-hover: #16161a;
+  --border:        rgba(255,255,255,0.06);
+  --text:          #edeae2;
+  --text-muted:    #64635e;
+  --text-dim:      #333330;
+  --mint:          #10E78F;
+  --red:           #FF3B30;
+  --mono: 'DM Mono', monospace;
+  --display: 'Syne', sans-serif;
+
+  --c-finance:   #FFB300;
+  --c-bda:       #10E78F;
+  --c-economics: #00C2FF;
+  --c-ism:       #A78BFA;
+  --c-ma:        #FF6B6B;
+  --c-marketing: #FF9A3C;
+  --c-mktres:    #F472B6;
+  --c-ops:       #34D399;
+  --c-pm:        #60A5FA;
+  --c-ai:        #E879F9;
+  --c-postgres:  #4ADE80;
+  --c-stats:     #FCD34D;
+  --c-python:    #38BDF8;
+}
+
+html {
+  background: var(--bg);
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--display);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── NOISE ── */
+.noise {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 120px;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(10,10,11,0.9);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.topbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.6rem 1.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.topbar-logo {
+  font-family: var(--display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  user-select: none;
+}
+
+.topbar-right {
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* Search */
+.search-wrap {
+  display: flex; align-items: center;
+  border: 1px solid rgba(16,231,143,0.25);
+  border-radius: 8px;
+  background: rgba(16,231,143,0.04);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+}
+.search-wrap:focus-within {
+  border-color: var(--mint);
+  box-shadow: 0 0 0 2px rgba(16,231,143,0.1);
+}
+
+.search-icon-btn {
+  display: none;
+  background: none; border: none; cursor: pointer;
+  padding: 6px 10px;
+  color: var(--mint);
+  font-size: 1rem;
+  align-items: center; justify-content: center;
+}
+
+#search-input {
+  background: none; border: none; outline: none;
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--text);
+  padding: 5px 10px;
+  width: 220px;
+}
+#search-input::placeholder { color: var(--text-dim); }
+
+.search-controls {
+  display: flex; align-items: center; gap: 2px;
+  padding-right: 6px;
+}
+.search-nav-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  padding: 3px 5px; border-radius: 4px;
+  font-family: var(--mono);
+  transition: color 0.15s, background 0.15s;
+}
+.search-nav-btn:hover { color: var(--mint); background: rgba(16,231,143,0.08); }
+
+.search-count {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding: 0 4px;
+  min-width: 32px;
+  text-align: center;
+}
+.search-close {
+  background: none; border: none; cursor: pointer;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  padding: 3px 7px; border-radius: 4px;
+  font-family: var(--mono); line-height: 1;
+  transition: color 0.15s;
+}
+.search-close:hover { color: var(--red); }
+
+/* Disclaimer */
+.disclaimer-btn {
+  background: rgba(255,59,48,0.07);
+  border: 1px solid rgba(255,59,48,0.28);
+  color: var(--red);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, border-color 0.2s;
+}
+.disclaimer-btn:hover {
+  background: rgba(255,59,48,0.14);
+  border-color: var(--red);
+}
+
+/* ── PAGE ── */
+.page {
+  position: relative; z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 5rem;
+}
+
+/* ── HEADER ── */
+header { margin-bottom: 2.5rem; }
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.6rem;
+  display: flex; align-items: center; gap: 10px;
+}
+.eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 14px; height: 1px;
+  background: var(--text-muted);
+}
+
+h1 {
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+h1 em { font-style: normal; color: var(--mint); }
+
+/* ── SECTION ── */
+.section { margin-bottom: 2rem; }
+
+.section-header {
+  display: flex; align-items: center; gap: 10px;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1px;
+}
+.section-label {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ── GRID ── */
+.hub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 1px;
+}
+
+/* ── CARD ── */
+.hub-card {
+  background: var(--bg-card);
+  padding: 1rem 1rem 0.9rem;
+  text-decoration: none;
+  display: flex; flex-direction: column; gap: 0.6rem;
+  transition: background 0.18s ease;
+  position: relative; overflow: hidden;
+  cursor: pointer;
+  /* BACKEND NOTE: To link a hub, replace href="#" with href="YourHubFile.html" on the <a> tag */
+}
+.hub-card:hover { background: var(--bg-card-hover); }
+.hub-card:hover .card-arrow { opacity: 1; transform: translate(2px,-2px); }
+.hub-card.search-match { background: rgba(16,231,143,0.04); }
+.hub-card.search-active { background: rgba(16,231,143,0.08); outline: 1px solid rgba(16,231,143,0.3); outline-offset: -1px; }
+
+.card-accent {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 2px;
+}
+
+.card-top {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 8px;
+}
+.card-left {
+  display: flex; align-items: center; gap: 8px;
+}
+.card-icon {
+  width: 28px; height: 28px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700; flex-shrink: 0;
+}
+.card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  line-height: 1.2;
+}
+.card-arrow {
+  font-size: 0.85rem; color: var(--text-muted);
+  opacity: 0; flex-shrink: 0;
+  transition: opacity 0.18s, transform 0.18s;
+}
+
+.card-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.tag {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  padding: 2px 7px; border-radius: 3px;
+  background: rgba(255,255,255,0.04);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+.tag.search-hit {
+  background: rgba(16,231,143,0.1);
+  color: var(--mint);
+  border-color: rgba(16,231,143,0.25);
+}
+
+/* LIVE BADGE
+   BACKEND NOTE: Add class "live" to the hub-card <a> tag to show the Live badge.
+   Remove "live" class to hide it. Example: <a class="hub-card live" href="..."> */
+.hub-card.live::after {
+  content: 'Live';
+  position: absolute; top: 9px; right: 9px;
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 7px; border-radius: 3px;
+  background: rgba(16,231,143,0.1);
+  color: var(--mint);
+  border: 1px solid rgba(16,231,143,0.28);
+}
+
+/* ── MODAL ── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  align-items: center; justify-content: center;
+  padding: 1.5rem;
+}
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: #111114;
+  border: 1px solid rgba(255,59,48,0.22);
+  border-top: 2px solid var(--red);
+  border-radius: 12px;
+  padding: 1.8rem;
+  max-width: 400px; width: 100%;
+  position: relative;
+}
+.modal-close {
+  position: absolute; top: 12px; right: 14px;
+  background: none; border: none; cursor: pointer;
+  color: var(--text-muted); font-size: 1rem; line-height: 1;
+  transition: color 0.15s;
+}
+.modal-close:hover { color: var(--red); }
+
+.modal-label {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 0.8rem;
+}
+.modal-body {
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  line-height: 1.75;
+  color: #9a9892;
+}
+.modal-body strong { color: var(--text); font-weight: 500; }
+/* BACKEND NOTE: Replace "Gautham" with LinkedIn anchor. Example:
+   <a href="https://linkedin.com/in/YOUR-LINKEDIN-ID" target="_blank"
+      style="color:var(--mint);text-decoration:none;font-weight:500;">Gautham</a>    */
+
+/* ── FOOTER ── */
+footer {
+  margin-top: 2.5rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 0.5rem;
+}
+.footer-text {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+/* BACKEND NOTE: Buy Me a Coffee — when ready, add inside footer:
+<a href="https://buymeacoffee.com/YOUR-ID" target="_blank" class="bmac-btn">☕ Buy me a coffee</a>
+CSS to add:
+.bmac-btn { font-family:var(--mono); font-size:0.75rem; padding:5px 12px; border-radius:6px;
+  background:rgba(255,179,0,0.08); border:1px solid rgba(255,179,0,0.28); color:#FFB300;
+  text-decoration:none; transition:background 0.2s; }
+.bmac-btn:hover { background:rgba(255,179,0,0.18); } */
+
+/* ── MOBILE ── */
+@media (max-width: 640px) {
+  .topbar-inner { padding: 0.5rem 1rem; }
+  .page { padding: 1.5rem 1rem 4rem; }
+  #search-input, .search-controls, .search-count { display: none; }
+  .search-icon-btn { display: flex; }
+  .search-wrap.mobile-open #search-input { display: block; width: 130px; }
+  .search-wrap.mobile-open .search-controls { display: flex; }
+  .search-wrap.mobile-open .search-count { display: block; }
+  .search-wrap.mobile-open .search-icon-btn { display: none; }
+  .disclaimer-btn { font-size: 0.65rem; padding: 4px 8px; }
+  .hub-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 380px) {
+  .hub-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="noise" aria-hidden="true"></div>
+
+<!-- ══ TOPBAR ══ -->
+<nav class="topbar">
+<div class="topbar-inner">
+  <span class="topbar-logo">Knowledge Hubs</span>
+  <div class="topbar-right">
+
+    <div class="search-wrap" id="search-wrap">
+      <button class="search-icon-btn" id="mobile-search-toggle" aria-label="Open search">🔍</button>
+      <input type="text" id="search-input" placeholder="Search hubs, tags…" autocomplete="off" spellcheck="false">
+      <div class="search-controls">
+        <span class="search-count" id="search-count"></span>
+        <button class="search-nav-btn" id="search-prev" title="Previous">↑</button>
+        <button class="search-nav-btn" id="search-next" title="Next">↓</button>
+        <button class="search-close" id="search-close" title="Close search">✕</button>
+      </div>
+    </div>
+
+    <button class="disclaimer-btn" id="disclaimer-btn">Disclaimer</button>
+  </div>
+</div>
+</nav>
+
+<!-- ══ MAIN ══ -->
+<main class="page">
+  <header>
+    <p class="eyebrow">Personal Reference Collection</p>
+    <h1>Knowledge <em>Hubs</em></h1>
+  </header>
+
+  <!-- ════ BUSINESS & STRATEGY ════ -->
+  <section class="section" data-section="Business & Strategy">
+    <div class="section-header">
+      <span class="section-label">Business &amp; Strategy</span>
+    </div>
+    <div class="hub-grid">
+
+      <!-- BACKEND NOTE: Replace href="#" with href="BusinessAnalyticsHub.html" when ready. Add class "live" to activate badge. -->
+      <a class="hub-card" href="#" data-title="Business & Data Analytics" data-section="Business & Strategy" data-tags="analytics data visualization dashboards bi sql excel power bi tableau">
+        <div class="card-accent" style="background:var(--c-bda);"></div>
+        <div class="card-top">
+          <div class="card-left">
+            <div class="card-icon" style="background:rgba(16,231,143,0.1);color:var(--c-bda);">◉</div>
+            <span class="card-title">Business &amp; Data Analytics</span>
+          </div>
+          <span class="card-arrow">↗</span>
+        </div>
+        <div class="card-tags">
+          <span class="tag">Analytics</span><span class="tag">BI</span><span class="tag">Dashboards</span><span class="tag">SQL</span>
+        </div>
+      </a>
+
+      <!-- BACKEND NOTE: Replace href="#" with href="EconomicsHub.html" when ready. Add class "live" to activate badge. -->
+      <a class="hub-card" href="#" data-title="Economics" data-section="Business & Strategy" data-tags="macro micro elasticity gdp markets policy inflation demand supply">
+        <div class="card-accent" style="background:var(--c-economics);"></div>
+        <div class="card-top">
+          <div class="card-left">
+            <div class="card-icon" style="background:rgba(0,194,255,0.1);color:var(--c-economics);">∿</div>
+            <span class="card-title">Economics</span>
+          </div>
+          <span class="card-arrow">↗</span>
+        </div>
+        <div class="card-tags">
+          <span class="tag">Macro</span><span class="tag">Micro</span><span class="tag">Markets</span><span class="tag">Policy</span>
+        </div>
+      </a>
+
+      <!-- BACKEND NOTE: href linked. "live" class active. Remove "live" to hide badge. -->
+      <a class="hub-card live" href="FinanceHub.html" data-title="Finance" data-section="Business & Strategy" data-tags="valuation dcf ratios wacc financial modeling capital structure bonds equity">
+        <div class="card-accent" style="background:var(--c-finance);"></div>
+        <div class="card-top">
+          <div class="card-left">
+            <div class="card-icon" style="background:rgba(255,179,0,0.1);color:var(--c-finance);">₹</div>
+            <span class="card-title">Finance</span>
+          </div>
+          <span class="card-arrow">↗</span>
+        </div>
+        <div class="card-tags">
+          <span class="tag">Valuation</span><span class="tag">DCF</span><span class="tag">Ratios</span><span class="tag">Modeling</span>
+        </div>
+      </a>
+
+      <!-- BACKEND NOTE: Replace href="#" with href="InformationSystemsHub.html" when ready. Add class "live" to activate badge. -->
+      <a class="hub-card" href="#" data-title="Information Systems" data-section="Business & Strategy" data-tags="erp crm mis ism systems technology management enterprise">
+        <div class="card-accent" style="background:var(--c-ism);"></div>
+        <div class="card-top">
+          <div class="card-left">
+            <div class="card-icon" style="background:rgba(167,139,250,0.1);color:var(--c-ism);">⬡</div>
+            <span class="card-title">Information Systems</span>
+          </div>
+          <span class="card-arrow">↗</span>
+        </div>
+        <div class="card-tags">
+          <span class="tag">ERP</span><span class="tag">MIS</span><span class="tag">Systems</span><span class="tag">CRM</span>
+        </div>
+      </a>
+
+      <!-- BACKEND NOTE: Replace href="#" with href="MAHub.html" when ready. Add class "live" to activate badge. -->
+      <a class="hub-card" href="#" data-title="M&A" data-section="Business & Strategy" data-tags="mergers acquisitions lbo synergies due diligence deal structure valuation">
+        <div class="card-accent" style="background:var(--c-ma);"></div>
+        <div class="card-top">
+          <div class="card-left">
+            <div class="card-icon" style="background:rgba(255,107,107,0.1);color:var(--c-ma);">⊕</div>
+            <span class="card-title">M&amp;A</span>
+          </div>
+          <span class="card-arrow">↗</span>
+        </div>
+        <div class="card-tags">
+          <span class="tag">LBO</span><span class="tag">Synergies</span><span class="tag">Due Diligence</span>
+        </div>
+      </a>
+
+      <!-- BACKEND NOTE: Replace href="#" with href="MarketingHub.html" when ready. Add class "live" to activate badge. -->
+      <a class="hub-card" href="#" data-title="Marketing" data-section="Business & Strategy" data-tags="stp 4ps brand clv campaign digital marketing funnel positioning">
+        <div class="card-accent" style="background:var(--c-marketing);"></div>
+        <div class="card-top">
+          <div class="card-left">
+            <div class="card-icon" style="background:rgba(255,154,60,0.1);color:var(--c-marketing);">◈</div>
+            <span class="card-title">Marketing</span>
+          </div>
+          <span class="card-arrow">↗</span>
+        </div>
+        <div class="card-tags">
+          <span class="tag">STP</span><span class="tag">4Ps</span><span class="tag">Branding</span><span class="tag">CLV</span>
+        </div>
+      </a>
+
+      <!-- BACKEND NOTE: Replace href="#" with href="MarketingResearchHub.html" when ready. Add class "live" to activate badge. -->
+      <a class="hub-card" href="#" data-title="Marketing Research" data-section="Business & Strategy" data-tags="voc research design sampling survey qualitative quantitative consumer insights focus group">
+        <div class="card-accent" style="background:var(--c-mktres);"></div>
+        <div class="card-top">
+          <div class="card-left">
+            <div class="card-icon" style="background:rgba(244,114,182,0.1);color:var(--c-mktres);">◎</div>
+            <span class="card-title">Marketing Research</span>
+          </div>
+          <span class="card-arrow">↗</span>
+        </div>
+        <div class="card-tags">
+          <span class="tag">VOC</span><span class="tag">Sampling</span><span class="tag">Quant</span><span class="tag">Qual</span>
+        </div>
+      </a>
+
+      <!-- BACKEND NOTE: Replace href="#" with href="OperationsHub.html" when ready. Add class "live" to activate badge. -->
+      <a class="hub-card" href="#" data-title="Operations" data-section="Business & Strategy" data-tags="supply chain dmaic lean six sigma process capability scm queuing logistics">
+        <div class="card-accent" style="background:var(--c-ops);"></div>
+        <div class="card-top">
+          <div class="card-left">
+            <div class="card-icon" style="background:rgba(52,211,153,0.1);color:var(--c-ops);">⟳</div>
+            <span class="card-title">Operations</span>
+          </div>
+          <span class="card-arrow">↗</span>
+        </div>
+        <div class="card-tags">
+          <span class="tag">Lean</span><span class="tag">DMAIC</span><span class="tag">SCM</span><span class="tag">Six Sigma</span>
+        </div>
+      </a>
+
+      <!-- BACKEND NOTE: Replace href="#" with href="ProductHub.html" when ready. Add class "live" to activate badge. -->
+      <a class="hub-card" href="#" data-title="Product Management" data-section="Business & Strategy" data-tags="roadmap gtm metrics prioritization rice aarrr okr north star product strategy lifecycle">
+        <div class="card-accent" style="background:var(--c-pm);"></div>
+        <div class="card-top">
+          <div class="card-left">
+            <div class="card-icon" style="background:rgba(96,165,250,0.1);color:var(--c-pm);">⬙</div>
+            <span class="card-title">Product Management</span>
+          </div>
+          <span class="card-arrow">↗</span>
+        </div>
+        <div class="card-tags">
+          <span class="tag">Roadmap</span><span class="tag">GTM</span><span class="tag">RICE</span><span class="tag">OKR</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ════ TECHNICAL & QUANTITATIVE ════ -->
+  <section class="section" data-section="Technical & Quantitative">
+    <div class="section-header">
+      <span class="section-label">Technical &amp; Quantitative</span>
+    </div>
+    <div class="hub-grid">
+
+      <!-- BACKEND NOTE: Replace href="#" with href="AIHub.html" when ready. Add class "live" to activate badge. -->
+      <a class="hub-card" href="#" data-title="AI & LLM" data-section="Technical & Quantitative" data-tags="artificial intelligence large language models prompt engineering transformers machine learning neural networks">
+        <div class="card-accent" style="background:var(--c-ai);"></div>
+        <div class="card-top">
+          <div class="card-left">
+            <div class="card-icon" style="background:rgba(232,121,249,0.1);color:var(--c-ai);">✦</div>
+            <span class="card-title">AI &amp; LLM</span>
+          </div>
+          <span class="card-arrow">↗</span>
+        </div>
+        <div class="card-tags">
+          <span class="tag">LLMs</span><span class="tag">Prompting</span><span class="tag">Transformers</span><span class="tag">ML</span>
+        </div>
+      </a>
+
+      <!-- BACKEND NOTE: Replace href="#" with href="PostgreSQLHub.html" when ready. Add class "live" to activate badge. -->
+      <a class="hub-card" href="#" data-title="PostgreSQL" data-section="Technical & Quantitative" data-tags="sql database queries joins indexing postgres relational tables schema">
+        <div class="card-accent" style="background:var(--c-postgres);"></div>
+        <div class="card-top">
+          <div class="card-left">
+            <div class="card-icon" style="background:rgba(74,222,128,0.1);color:var(--c-postgres);">🐘</div>
+            <span class="card-title">PostgreSQL</span>
+          </div>
+          <span class="card-arrow">↗</span>
+        </div>
+        <div class="card-tags">
+          <span class="tag">SQL</span><span class="tag">Queries</span><span class="tag">Joins</span><span class="tag">Indexing</span>
+        </div>
+      </a>
+
+      <!-- BACKEND NOTE: Replace href="#" with href="StatsHub.html" when ready. Add class "live" to activate badge. -->
+      <a class="hub-card" href="#" data-title="Probability & Statistics" data-section="Technical & Quantitative" data-tags="distributions hypothesis testing regression bayesian six sigma dpmo probability variance">
+        <div class="card-accent" style="background:var(--c-stats);"></div>
+        <div class="card-top">
+          <div class="card-left">
+            <div class="card-icon" style="background:rgba(252,211,77,0.1);color:var(--c-stats);">σ</div>
+            <span class="card-title">Probability &amp; Statistics</span>
+          </div>
+          <span class="card-arrow">↗</span>
+        </div>
+        <div class="card-tags">
+          <span class="tag">Distributions</span><span class="tag">Regression</span><span class="tag">Hypothesis</span><span class="tag">Bayesian</span>
+        </div>
+      </a>
+
+      <!-- BACKEND NOTE: Replace href="#" with href="PythonHub.html" when ready. Add class "live" to activate badge. -->
+      <a class="hub-card" href="#" data-title="Python" data-section="Technical & Quantitative" data-tags="python pandas numpy scripting automation data analysis oop functions loops">
+        <div class="card-accent" style="background:var(--c-python);"></div>
+        <div class="card-top">
+          <div class="card-left">
+            <div class="card-icon" style="background:rgba(56,189,248,0.1);color:var(--c-python);">🐍</div>
+            <span class="card-title">Python</span>
+          </div>
+          <span class="card-arrow">↗</span>
+        </div>
+        <div class="card-tags">
+          <span class="tag">Pandas</span><span class="tag">NumPy</span><span class="tag">Scripting</span><span class="tag">OOP</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <footer>
+    <span class="footer-text">gautify.github.io/Subjects</span>
+    <span class="footer-text">Personal use only · Verify before decisions</span>
+    <!-- BACKEND NOTE: Buy Me a Coffee — see CSS comment for implementation when ready -->
+  </footer>
+</main>
+
+<!-- ══ DISCLAIMER MODAL ══ -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" role="dialog" aria-modal="true">
+    <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+    <p class="modal-label">Disclaimer</p>
+    <p class="modal-body">
+      This resource is for personal reference only. No guarantee is made on accuracy or
+      completeness — please verify all information independently before making any decisions.
+      I am not liable for any errors or consequences arising from its use.<br><br>
+      <!-- BACKEND NOTE: Replace "Gautham" with LinkedIn anchor when ready:
+      <a href="https://linkedin.com/in/YOUR-LINKEDIN-ID" target="_blank"
+         style="color:var(--mint);text-decoration:none;font-weight:500;">Gautham</a> -->
+      For updates or suggestions, connect with <strong>Gautham</strong>.
+    </p>
+  </div>
+</div>
+
+<!-- ══ DUMMY CARD TEMPLATE — copy to add a new hub ══
+PASTE inside the correct .hub-grid. Pick a new color var in :root if needed.
+
+<a class="hub-card" href="#" data-title="Hub Name" data-section="Section Name" data-tags="keyword1 keyword2 keyword3">
+  <div class="card-accent" style="background:#YOURCOLOR;"></div>
+  <div class="card-top">
+    <div class="card-left">
+      <div class="card-icon" style="background:rgba(R,G,B,0.1);color:#YOURCOLOR;">ICON</div>
+      <span class="card-title">Hub Name</span>
+    </div>
+    <span class="card-arrow">↗</span>
+  </div>
+  <div class="card-tags">
+    <span class="tag">Tag1</span>
+    <span class="tag">Tag2</span>
+    <span class="tag">Tag3</span>
+  </div>
+</a>
+
+TO GO LIVE:
+  1. Replace href="#" → href="YourFile.html"
+  2. Add "live" to class → <a class="hub-card live" href="...">
+══ END TEMPLATE ══ -->
+
+<script>
+// Prevent page jump on unlinked cards
+document.querySelectorAll('.hub-card[href="#"]').forEach(c => {
+  c.addEventListener('click', e => e.preventDefault());
+});
+
+// Disclaimer modal
+const overlay = document.getElementById('modal-overlay');
+document.getElementById('disclaimer-btn').addEventListener('click', () => overlay.classList.add('open'));
+document.getElementById('modal-close').addEventListener('click', () => overlay.classList.remove('open'));
+overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') overlay.classList.remove('open'); });
+
+// Mobile search toggle
+document.getElementById('mobile-search-toggle').addEventListener('click', () => {
+  document.getElementById('search-wrap').classList.add('mobile-open');
+  document.getElementById('search-input').focus();
+});
+
+// Search
+const input  = document.getElementById('search-input');
+const close  = document.getElementById('search-close');
+const prev   = document.getElementById('search-prev');
+const next   = document.getElementById('search-next');
+const count  = document.getElementById('search-count');
+
+let matches = [], idx = -1;
+
+function norm(s) { return s.toLowerCase(); }
+
+function search() {
+  const q = norm(input.value.trim());
+  document.querySelectorAll('.hub-card').forEach(c => {
+    c.classList.remove('search-match','search-active');
+    c.querySelectorAll('.tag').forEach(t => t.classList.remove('search-hit'));
+  });
+  matches = []; idx = -1;
+  if (!q) { count.textContent = ''; return; }
+
+  document.querySelectorAll('.hub-card').forEach(c => {
+    const hit = norm(c.dataset.title||'').includes(q)
+             || norm(c.dataset.section||'').includes(q)
+             || norm(c.dataset.tags||'').includes(q);
+    if (hit) {
+      c.classList.add('search-match');
+      matches.push(c);
+      c.querySelectorAll('.tag').forEach(t => {
+        if (norm(t.textContent).includes(q)) t.classList.add('search-hit');
+      });
+    }
+  });
+
+  if (matches.length) { idx = 0; activate(); }
+  else count.textContent = '0';
+}
+
+function activate() {
+  matches.forEach(c => c.classList.remove('search-active'));
+  if (!matches.length) return;
+  matches[idx].classList.add('search-active');
+  matches[idx].scrollIntoView({ behavior:'smooth', block:'center' });
+  count.textContent = `${idx+1}/${matches.length}`;
+}
+
+input.addEventListener('input', search);
+next.addEventListener('click', () => { if (!matches.length) return; idx=(idx+1)%matches.length; activate(); });
+prev.addEventListener('click', () => { if (!matches.length) return; idx=(idx-1+matches.length)%matches.length; activate(); });
+input.addEventListener('keydown', e => {
+  if (e.key==='Enter') { e.preventDefault(); if (matches.length){idx=(idx+1)%matches.length;activate();} }
+});
+close.addEventListener('click', () => {
+  input.value = '';
+  search();
+  document.getElementById('search-wrap').classList.remove('mobile-open');
+});
+</script>
+</body>
+</html>
