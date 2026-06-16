@@ -1,0 +1,3401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Economics Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #07090f;
+  --bg-base: #0c1018;
+  --bg-card: #111722;
+  --bg-elevated: #17202e;
+  --bg-hover: #1d2840;
+  --border: rgba(255,255,255,0.07);
+  --border-med: rgba(255,255,255,0.12);
+  --border-strong: rgba(255,255,255,0.2);
+  --text-primary: #e2e8f5;
+  --text-secondary: #8d9bb5;
+  --text-muted: #4e5d75;
+
+  --basics: #10b981;
+  --basics-dim: rgba(16,185,129,0.12);
+  --basics-border: rgba(16,185,129,0.3);
+  --micro: #3b82f6;
+  --micro-dim: rgba(59,130,246,0.12);
+  --micro-border: rgba(59,130,246,0.3);
+  --macro: #a78bfa;
+  --macro-dim: rgba(167,139,250,0.12);
+  --macro-border: rgba(167,139,250,0.3);
+  --trade: #f59e0b;
+  --trade-dim: rgba(245,158,11,0.12);
+  --trade-border: rgba(245,158,11,0.3);
+  --missed: #f87171;
+  --missed-dim: rgba(248,113,113,0.12);
+  --missed-border: rgba(248,113,113,0.3);
+
+  --formula-bg: #090e1a;
+  --formula-border: rgba(59,130,246,0.4);
+  --example-bg: #080f0b;
+  --example-border: rgba(16,185,129,0.4);
+  --fyi-bg: #100d04;
+  --fyi-border: rgba(245,158,11,0.4);
+  --deep-bg: #100810;
+  --deep-border: rgba(167,139,250,0.4);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+.hub-header {
+  background: linear-gradient(135deg, #080c14 0%, #0f1525 50%, #08101f 100%);
+  border-bottom: 1px solid var(--border-med);
+  padding: 28px 32px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+
+.header-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.header-icon {
+  font-size: 2.2rem;
+  line-height: 1;
+  margin-top: 4px;
+}
+
+.header-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #e2e8f5 30%, #7dd3fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+}
+
+.header-sub {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 400;
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border-med);
+  border-radius: 8px;
+  padding: 7px 14px;
+  gap: 8px;
+  max-width: 280px;
+  margin-left: auto;
+}
+
+.search-bar input {
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  width: 100%;
+}
+
+.search-bar input::placeholder { color: var(--text-muted); }
+
+/* ===== MAIN NAV ===== */
+.main-nav {
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  padding-bottom: 0;
+}
+
+.main-nav::-webkit-scrollbar { display: none; }
+
+.nav-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  position: relative;
+  top: 1px;
+}
+
+.nav-tab:hover { color: var(--text-secondary); }
+.nav-tab.active { color: var(--text-primary); }
+.nav-tab[data-section="basics"].active { border-color: var(--basics); }
+.nav-tab[data-section="micro"].active { border-color: var(--micro); }
+.nav-tab[data-section="macro"].active { border-color: var(--macro); }
+.nav-tab[data-section="trade"].active { border-color: var(--trade); }
+.nav-tab[data-section="missed"].active { border-color: var(--missed); }
+
+.nav-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.basics-dot { background: var(--basics); }
+.micro-dot { background: var(--micro); }
+.macro-dot { background: var(--macro); }
+.trade-dot { background: var(--trade); }
+.missed-dot { background: var(--missed); }
+
+/* ===== CONTENT WRAPPER ===== */
+.content-wrapper {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.section-panel { display: none; }
+.section-panel.active { display: block; }
+
+/* ===== SECTION HEADER ===== */
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 28px;
+  padding: 24px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+}
+
+.section-header.basics { background: var(--basics-dim); border-color: var(--basics-border); }
+.section-header.micro { background: var(--micro-dim); border-color: var(--micro-border); }
+.section-header.macro { background: var(--macro-dim); border-color: var(--macro-border); }
+.section-header.trade { background: var(--trade-dim); border-color: var(--trade-border); }
+.section-header.missed { background: var(--missed-dim); border-color: var(--missed-border); }
+
+.section-emoji { font-size: 2rem; }
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+.section-desc { color: var(--text-secondary); font-size: 14px; line-height: 1.6; }
+.section-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+
+/* ===== SUB-NAV ===== */
+.sub-nav {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.sub-tab {
+  padding: 7px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sub-tab:hover { background: var(--bg-elevated); color: var(--text-primary); border-color: var(--border-med); }
+.sub-tab.active { color: var(--text-primary); background: var(--bg-elevated); border-color: var(--border-strong); }
+.sub-tab[data-parent="basics"].active { border-color: var(--basics); color: var(--basics); }
+.sub-tab[data-parent="micro"].active { border-color: var(--micro); color: var(--micro); }
+.sub-tab[data-parent="macro"].active { border-color: var(--macro); color: var(--macro); }
+.sub-tab[data-parent="trade"].active { border-color: var(--trade); color: var(--trade); }
+.sub-tab[data-parent="missed"].active { border-color: var(--missed); color: var(--missed); }
+
+/* ===== PANELS ===== */
+.panel { display: none; }
+.panel.active { display: block; animation: fadeIn 0.25s ease; }
+
+@keyframes fadeIn { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform:none; } }
+
+/* ===== CARDS ===== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px 24px;
+  margin-bottom: 16px;
+  transition: border-color 0.2s;
+}
+
+.card:hover { border-color: var(--border-med); }
+
+.card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.card-body { color: var(--text-secondary); font-size: 14.5px; line-height: 1.75; }
+.card-body p { margin-bottom: 10px; }
+.card-body ul, .card-body ol { padding-left: 20px; margin-bottom: 10px; }
+.card-body li { margin-bottom: 5px; }
+.card-body strong { color: var(--text-primary); font-weight: 600; }
+.card-body em { color: #93c5fd; font-style: normal; }
+
+/* ===== BADGES ===== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap;
+}
+
+.badge-foundational { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+.badge-core { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+.badge-advanced { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+.badge-deepdive { background: rgba(167,139,250,0.15); color: #c084fc; border: 1px solid rgba(167,139,250,0.3); }
+.badge-skip { background: rgba(100,116,139,0.15); color: #94a3b8; border: 1px solid rgba(100,116,139,0.3); }
+
+/* ===== BOXES ===== */
+.formula-box {
+  background: var(--formula-bg);
+  border: 1px solid var(--formula-border);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13.5px;
+  color: #93c5fd;
+  line-height: 1.8;
+}
+
+.formula-box .f-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+}
+
+.example-box {
+  background: var(--example-bg);
+  border: 1px solid var(--example-border);
+  border-left: 3px solid var(--basics);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.example-box .ex-label {
+  color: #34d399;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fyi-box {
+  background: var(--fyi-bg);
+  border: 1px solid var(--fyi-border);
+  border-left: 3px solid var(--trade);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.fyi-box .fyi-label {
+  color: #fbbf24;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.deep-box {
+  background: var(--deep-bg);
+  border: 1px solid var(--deep-border);
+  border-left: 3px solid var(--macro);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.deep-box .deep-label {
+  color: #c084fc;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 6px;
+}
+
+/* ===== GRID ===== */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 16px; }
+
+@media (max-width: 700px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .hub-header { padding: 20px 16px 0; }
+  .content-wrapper { padding: 24px 14px; }
+}
+
+/* ===== TERM CARDS ===== */
+.term-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 14px 0; }
+
+.term-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.term-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.term-abbr {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  margin-bottom: 5px;
+}
+
+.term-def { color: var(--text-secondary); font-size: 13.5px; line-height: 1.5; }
+
+/* ===== DIAGRAMS ===== */
+.diagram-wrap {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-med);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 16px 0;
+  text-align: center;
+}
+
+.diagram-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 14px;
+}
+
+svg text { font-family: 'DM Sans', sans-serif; }
+
+/* ===== CALCULATORS ===== */
+.calc-box {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-med);
+  border-radius: 12px;
+  padding: 22px;
+  margin: 16px 0;
+}
+
+.calc-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+@media (max-width: 500px) { .calc-grid { grid-template-columns: 1fr; } }
+
+.input-group { display: flex; flex-direction: column; gap: 5px; }
+.input-group label { font-size: 12px; color: var(--text-muted); font-weight: 500; letter-spacing: 0.3px; }
+
+.calc-input {
+  background: var(--bg-card);
+  border: 1px solid var(--border-med);
+  border-radius: 7px;
+  padding: 9px 12px;
+  color: var(--text-primary);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+.calc-input:focus { border-color: var(--micro); }
+
+.calc-btn {
+  padding: 10px 22px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  transition: all 0.2s;
+  margin-top: 4px;
+}
+
+.calc-btn.primary { background: var(--micro); color: white; }
+.calc-btn.primary:hover { background: #2563eb; }
+.calc-btn.success { background: var(--basics); color: white; }
+.calc-btn.success:hover { background: #059669; }
+.calc-btn.warning { background: var(--trade); color: white; }
+.calc-btn.warning:hover { background: #d97706; }
+
+.calc-result {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  min-height: 48px;
+  display: none;
+}
+
+.calc-result.show { display: block; }
+.result-value { font-size: 1.4rem; font-weight: 700; color: var(--text-primary); font-family: 'JetBrains Mono', monospace; }
+.result-label { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+.result-interp { color: #60a5fa; margin-top: 8px; font-size: 13.5px; }
+
+/* ===== COMPARISON TABLE ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  font-size: 13.5px;
+}
+
+th {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  font-weight: 600;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-med);
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+  vertical-align: top;
+}
+
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* ===== HIGHLIGHT ===== */
+.highlight { color: #fbbf24; font-weight: 600; }
+.highlight-blue { color: #60a5fa; }
+.highlight-green { color: #34d399; }
+.highlight-purple { color: #c084fc; }
+.highlight-red { color: #f87171; }
+
+/* ===== PILLARS / INFO BOXES ===== */
+.pillar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 14px 0; }
+@media (max-width: 600px) { .pillar-grid { grid-template-columns: 1fr; } }
+
+.pillar {
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid var(--border);
+}
+
+.pillar-icon { font-size: 1.6rem; margin-bottom: 8px; }
+.pillar-name { font-weight: 700; font-size: 14px; color: var(--text-primary); margin-bottom: 4px; }
+.pillar-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+
+/* ===== ACCORDION ===== */
+.accord-item {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.accord-head {
+  padding: 14px 18px;
+  background: var(--bg-card);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s;
+  font-weight: 500;
+  font-size: 14.5px;
+  color: var(--text-primary);
+}
+
+.accord-head:hover { background: var(--bg-elevated); }
+.accord-arrow { transition: transform 0.25s; color: var(--text-muted); font-size: 12px; }
+.accord-item.open .accord-arrow { transform: rotate(180deg); }
+
+.accord-body {
+  display: none;
+  padding: 16px 18px;
+  background: var(--bg-deep);
+  border-top: 1px solid var(--border);
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.accord-item.open .accord-body { display: block; }
+
+/* ===== SEARCH HIGHLIGHT ===== */
+.search-match { background: rgba(245,158,11,0.25); border-radius: 2px; }
+
+/* ===== STEP LIST ===== */
+.step-list { counter-reset: steps; padding-left: 0; list-style: none; }
+.step-list li {
+  counter-increment: steps;
+  display: flex;
+  gap: 14px;
+  margin-bottom: 12px;
+  align-items: flex-start;
+}
+.step-list li::before {
+  content: counter(steps);
+  background: var(--micro);
+  color: white;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ===== SCROLL ===== */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-base); }
+::-webkit-scrollbar-thumb { background: var(--border-med); border-radius: 10px; }
+
+/* ===== PRINT ===== */
+@media print { .hub-header { position: relative; } }
+
+/* ===== LEGEND BAR ===== */
+.legend-bar {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 10px 0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ===== PROGRESS ===== */
+.progress-track {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 8px 0 0;
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hub-header">
+  <div class="header-top">
+    <div class="header-icon">📊</div>
+    <div>
+      <div class="header-title">Economics Hub</div>
+      <div class="header-sub">From first principles to policy & global trade — with Indian context</div>
+    </div>
+    <div class="search-bar">
+      <span style="color:var(--text-muted);font-size:14px;">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search concepts..." oninput="searchContent(this.value)">
+    </div>
+  </div>
+  <nav class="main-nav">
+    <button class="nav-tab active" data-section="basics" onclick="switchSection('basics')">
+      <span class="nav-dot basics-dot"></span> 1 · Basics
+    </button>
+    <button class="nav-tab" data-section="micro" onclick="switchSection('micro')">
+      <span class="nav-dot micro-dot"></span> 2 · Microeconomics
+    </button>
+    <button class="nav-tab" data-section="macro" onclick="switchSection('macro')">
+      <span class="nav-dot macro-dot"></span> 3 · Macroeconomics
+    </button>
+    <button class="nav-tab" data-section="trade" onclick="switchSection('trade')">
+      <span class="nav-dot trade-dot"></span> 4 · International Trade & WTO
+    </button>
+    <button class="nav-tab" data-section="missed" onclick="switchSection('missed')">
+      <span class="nav-dot missed-dot"></span> 5 · What You Missed
+    </button>
+  </nav>
+</header>
+
+<!-- CONTENT -->
+<div class="content-wrapper">
+
+<!-- LEGEND -->
+<div class="legend-bar">
+  <div class="legend-item"><span class="badge badge-foundational">● Foundational</span> Start here — must know basics</div>
+  <div class="legend-item"><span class="badge badge-core">● Core</span> Essential concepts</div>
+  <div class="legend-item"><span class="badge badge-advanced">● Advanced</span> Good to know</div>
+  <div class="legend-item"><span class="badge badge-deepdive">● Deep-dive</span> Revisit later</div>
+</div>
+
+<!-- ===================== SECTION 1: BASICS ===================== -->
+<div id="section-basics" class="section-panel active">
+  <div class="section-header basics">
+    <div class="section-emoji">📚</div>
+    <div>
+      <div class="section-title">Foundations of Economics</div>
+      <div class="section-desc">The bedrock: what economics is, why it exists, and its two grand branches — Micro and Macro.</div>
+      <div class="section-tags">
+        <span class="badge badge-foundational">Start Here</span>
+        <span style="font-size:13px;color:var(--text-muted);">3 topics · ~30 min</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-nav">
+    <button class="sub-tab active" data-parent="basics" onclick="switchPanel('basics','what')" data-panel="what">What is Economics?</button>
+    <button class="sub-tab" data-parent="basics" onclick="switchPanel('basics','terms')" data-panel="terms">Key Terms</button>
+    <button class="sub-tab" data-parent="basics" onclick="switchPanel('basics','micromacro')" data-panel="micromacro">Micro vs Macro</button>
+  </div>
+
+  <!-- Panel: What is Economics -->
+  <div id="basics-what" class="panel active">
+    <div class="card">
+      <div class="card-title">
+        What is Economics?
+        <span class="badge badge-foundational">Foundational</span>
+      </div>
+      <div class="card-body">
+        <p>Economics is the study of how individuals, firms, and societies <strong>allocate scarce resources</strong> to satisfy unlimited wants. The core problem is simple: resources are finite, but desires are not.</p>
+        <p>The word comes from the Greek <em>oikonomia</em> — "management of a household." In modern terms, it's about decision-making under constraints.</p>
+
+        <div class="pillar-grid">
+          <div class="pillar" style="background:rgba(16,185,129,0.07);border-color:var(--basics-border)">
+            <div class="pillar-icon">🥜</div>
+            <div class="pillar-name">Scarcity</div>
+            <div class="pillar-desc">Resources — land, labour, capital — are limited. Choices must be made about how to use them.</div>
+          </div>
+          <div class="pillar" style="background:rgba(59,130,246,0.07);border-color:var(--micro-border)">
+            <div class="pillar-icon">⚖️</div>
+            <div class="pillar-name">Trade-off</div>
+            <div class="pillar-desc">Choosing one option means giving up another. Every decision involves a trade-off.</div>
+          </div>
+          <div class="pillar" style="background:rgba(245,158,11,0.07);border-color:var(--trade-border)">
+            <div class="pillar-icon">💸</div>
+            <div class="pillar-name">Opportunity Cost</div>
+            <div class="pillar-desc">The value of the next best alternative you give up. The true cost of any choice.</div>
+          </div>
+        </div>
+
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 Indian Example</div>
+          A farmer in Punjab has 1 acre of land. He can grow wheat or rice. If he chooses wheat and earns ₹50,000, the opportunity cost is the profit foregone from rice (say ₹40,000). The real cost of growing wheat is not just seeds and labour — it's the ₹40,000 he didn't earn from rice.
+        </div>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 FYI</div>
+          <strong>Lionel Robbins (1932)</strong> gave the most famous definition: "Economics is the science which studies human behaviour as a relationship between ends and scarce means which have alternative uses." This definition shifted economics from studying wealth to studying choices.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        Positive vs Normative Economics
+        <span class="badge badge-foundational">Foundational</span>
+      </div>
+      <div class="card-body">
+        <table>
+          <tr><th>Type</th><th>What it says</th><th>Example</th></tr>
+          <tr>
+            <td><strong>Positive</strong></td>
+            <td>Factual statements — what <em>is</em>. Can be tested empirically.</td>
+            <td>"A 10% rise in petrol prices leads to a 6% fall in petrol consumption."</td>
+          </tr>
+          <tr>
+            <td><strong>Normative</strong></td>
+            <td>Value judgments — what <em>ought to be</em>. Cannot be tested.</td>
+            <td>"The government should subsidise electric vehicles for the poor."</td>
+          </tr>
+        </table>
+        <div class="fyi-box">
+          <div class="fyi-label">💡 FYI</div>
+          Most policy debates mix positive and normative. For example: "Petrol tax will reduce emissions" (positive) + "we should reduce emissions" (normative) = "we should raise petrol tax." Good economists label which part is which.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        Economic Models & Ceteris Paribus
+        <span class="badge badge-core">Core</span>
+      </div>
+      <div class="card-body">
+        <p><strong>Economic model</strong>: A simplified representation of reality, like a map. It highlights what matters and ignores the rest. Examples: demand-supply model, IS-LM, AS-AD.</p>
+        <p><strong>Ceteris Paribus (Latin)</strong>: "All other things being equal." When economists say "a price rise reduces demand, ceteris paribus," they mean — holding income, preferences, prices of related goods constant.</p>
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 Indian Example</div>
+          When the RBI (Reserve Bank of India) raises the repo rate, the model predicts borrowing will fall — ceteris paribus. But in practice, if simultaneously the government announces a big infrastructure push, investment may not fall. Models are tools, not perfect predictors.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Production Possibility Frontier (PPF) <span class="badge badge-foundational">Foundational</span></div>
+      <div class="card-body">
+        <p>The <strong>PPF</strong> shows all combinations of two goods an economy can produce when all resources are fully and efficiently used. It illustrates scarcity, trade-offs, opportunity cost, and efficiency simultaneously.</p>
+        <div class="diagram-wrap">
+          <div class="diagram-title">Production Possibility Frontier</div>
+          <svg viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg" style="max-width:380px;width:100%;">
+            <line x1="50" y1="260" x2="360" y2="260" stroke="#4e5d75" stroke-width="1.5"/>
+            <line x1="50" y1="260" x2="50" y2="20" stroke="#4e5d75" stroke-width="1.5"/>
+            <polygon points="360,256 368,260 360,264" fill="#4e5d75"/>
+            <polygon points="46,20 50,12 54,20" fill="#4e5d75"/>
+            <text x="370" y="264" fill="#8d9bb5" font-size="12">Wheat</text>
+            <text x="30" y="16" fill="#8d9bb5" font-size="12">Steel</text>
+            <!-- PPF curve (concave to origin) -->
+            <path d="M 60 40 Q 120 60 180 120 Q 240 185 330 255" stroke="#3b82f6" stroke-width="2.5" fill="none"/>
+            <!-- Shifted PPF (economic growth) -->
+            <path d="M 70 40 Q 145 62 210 125 Q 270 190 355 255" stroke="#3b82f6" stroke-width="1.5" fill="none" stroke-dasharray="5,4" opacity="0.4"/>
+            <!-- Points -->
+            <circle cx="180" cy="120" r="5" fill="#34d399"/>
+            <circle cx="240" cy="150" r="5" fill="#34d399"/>
+            <circle cx="270" cy="100" r="5" fill="#f87171"/>
+            <circle cx="130" cy="180" r="5" fill="#fbbf24"/>
+            <!-- Dashed lines for point A -->
+            <line x1="50" y1="120" x2="180" y2="120" stroke="#34d399" stroke-width="1" stroke-dasharray="3,3"/>
+            <line x1="180" y1="120" x2="180" y2="260" stroke="#34d399" stroke-width="1" stroke-dasharray="3,3"/>
+            <!-- Labels -->
+            <text x="188" y="115" fill="#34d399" font-size="11" font-weight="600">A (efficient)</text>
+            <text x="248" y="146" fill="#34d399" font-size="11" font-weight="600">B (efficient)</text>
+            <text x="278" y="97" fill="#f87171" font-size="11">C (unattainable)</text>
+            <text x="60" y="185" fill="#fbbf24" font-size="11">D (inefficient)</text>
+            <text x="340" y="248" fill="#3b82f6" font-size="10" opacity="0.6">PPF'</text>
+            <text x="336" y="256" fill="#3b82f6" font-size="11">PPF</text>
+            <!-- OC arrow -->
+            <text x="55" y="275" fill="#4e5d75" font-size="10">↑ More steel requires sacrificing wheat → rising opportunity cost (concavity)</text>
+          </svg>
+        </div>
+        <ul>
+          <li><strong>Points on PPF</strong> (A, B): Productively efficient — all resources used</li>
+          <li><strong>Point inside PPF</strong> (D): Inefficient — unemployment, idle resources</li>
+          <li><strong>Point outside PPF</strong> (C): Currently unattainable — needs more resources or better technology</li>
+          <li><strong>Outward shift of PPF</strong>: Economic growth — better technology, more resources, education</li>
+          <li><strong>Concavity</strong>: Resources are not perfectly adaptable → increasing opportunity cost as you specialise more</li>
+        </ul>
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 India's PPF Shift</div>
+          India's PLI (Production Linked Incentive) scheme for semiconductors and mobile manufacturing aims to shift India's PPF outward — by boosting productive capacity. Similarly, investment in education and health (National Education Policy, Ayushman Bharat) improves human capital, shifting PPF upward over the long run.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Key Terms -->
+  <div id="basics-terms" class="panel">
+    <div class="card">
+      <div class="card-title">Core Vocabulary <span class="badge badge-foundational">Foundational</span></div>
+      <div class="card-body">
+        <div class="term-grid">
+          <div class="term-card">
+            <div class="term-name">Factors of Production</div>
+            <div class="term-def">Inputs used to produce goods and services: <strong>Land</strong> (natural resources), <strong>Labour</strong> (human effort), <strong>Capital</strong> (machinery, tools), <strong>Enterprise</strong> (entrepreneurship). Together: <em>LLCE</em>.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Utility</div>
+            <div class="term-def">Satisfaction or usefulness a consumer gets from a good/service. A subjective measure — measured in "utils" theoretically.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Equilibrium</div>
+            <div class="term-def">A state where there is no tendency to change. In a market: when quantity demanded equals quantity supplied.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Elasticity</div>
+            <div class="term-def">The responsiveness of one variable to a change in another. E.g., how much does quantity demanded change when price changes?</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Market</div>
+            <div class="term-def">Any arrangement where buyers and sellers interact to exchange goods, services, or resources. Need not be a physical place.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Marginal</div>
+            <div class="term-def">The <em>additional</em> change from one more unit. "Marginal cost" = cost of producing one more unit. Thinking at the margin is central to economics.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Rational Agent</div>
+            <div class="term-def">Classical assumption: individuals make decisions to maximise their utility/profit, given constraints. Real people often deviate (see Behavioural Economics).</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Market Failure</div>
+            <div class="term-def">When free markets lead to inefficient outcomes — e.g., pollution, public goods, monopoly, information asymmetry.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">GDP</div>
+            <div class="term-def">Gross Domestic Product — total monetary value of all final goods and services produced within a country in a year.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Inflation</div>
+            <div class="term-def">Sustained rise in the general price level. Reduces the purchasing power of money. Measured by CPI, WPI, or GDP Deflator in India.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Fiscal Policy</div>
+            <div class="term-def">Government decisions on spending (G) and taxation (T) to influence the economy. Expansionary: ↑G or ↓T. Contractionary: ↓G or ↑T.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Monetary Policy</div>
+            <div class="term-def">Central bank (RBI in India) decisions on money supply and interest rates to control inflation and growth. Tools: repo rate, CRR, SLR, OMOs.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Economic Agents <span class="badge badge-foundational">Foundational</span></div>
+      <div class="card-body">
+        <p>Economics involves three main decision-makers:</p>
+        <div class="pillar-grid">
+          <div class="pillar" style="background:rgba(16,185,129,0.07);border-color:var(--basics-border)">
+            <div class="pillar-icon">👤</div>
+            <div class="pillar-name">Households (Consumers)</div>
+            <div class="pillar-desc">Supply labour & other factors; demand goods and services. Goal: maximise utility given a budget constraint.</div>
+          </div>
+          <div class="pillar" style="background:rgba(59,130,246,0.07);border-color:var(--micro-border)">
+            <div class="pillar-icon">🏭</div>
+            <div class="pillar-name">Firms (Producers)</div>
+            <div class="pillar-desc">Hire factors of production; supply goods and services. Goal: maximise profit.</div>
+          </div>
+          <div class="pillar" style="background:rgba(167,139,250,0.07);border-color:var(--macro-border)">
+            <div class="pillar-icon">🏛️</div>
+            <div class="pillar-name">Government</div>
+            <div class="pillar-desc">Regulates markets, provides public goods, redistributes income, runs fiscal and monetary policy.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Micro vs Macro -->
+  <div id="basics-micromacro" class="panel">
+    <div class="card">
+      <div class="card-title">Microeconomics vs Macroeconomics <span class="badge badge-foundational">Foundational</span></div>
+      <div class="card-body">
+        <p>Economics is broadly divided into two branches. They study different scales of the same economy.</p>
+        <table>
+          <tr><th></th><th>Microeconomics</th><th>Macroeconomics</th></tr>
+          <tr>
+            <td><strong>Focus</strong></td>
+            <td>Individual agents — consumers, firms, markets</td>
+            <td>Economy as a whole — national output, inflation, employment</td>
+          </tr>
+          <tr>
+            <td><strong>Key questions</strong></td>
+            <td>Why does the price of onions rise? How does a consumer decide what to buy?</td>
+            <td>Why does India's GDP grow at 7%? What causes inflation?</td>
+          </tr>
+          <tr>
+            <td><strong>Unit of analysis</strong></td>
+            <td>One market, one firm, one consumer</td>
+            <td>Entire national or global economy</td>
+          </tr>
+          <tr>
+            <td><strong>Key models</strong></td>
+            <td>Demand-Supply, Indifference Curves, Cost curves</td>
+            <td>IS-LM, AD-AS, Phillips Curve, Solow Growth Model</td>
+          </tr>
+          <tr>
+            <td><strong>Policy examples</strong></td>
+            <td>Price ceiling on LPG, minimum wage law, GST on restaurants</td>
+            <td>RBI raising repo rate, Union Budget, export subsidies</td>
+          </tr>
+          <tr>
+            <td><strong>Indian example</strong></td>
+            <td>Why did tomato prices hit ₹200/kg in 2023?</td>
+            <td>Why did India's current account deficit widen in FY23?</td>
+          </tr>
+        </table>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 FYI — The "Fallacy of Composition"</div>
+          What's good for one agent isn't always good for the whole economy. If one firm cuts wages to reduce costs, it's rational. But if <em>all</em> firms do it, aggregate demand falls — everyone's worse off. This is why micro logic doesn't always translate to macro. Keynes made this a central point.
+        </div>
+
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 Real Connection</div>
+          When onion prices rose sharply in India (micro event), it contributed to headline CPI inflation (macro measure). The government's response — banning onion exports — was a micro intervention with macro consequences (currency effects, trade balance impact).
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END BASICS -->
+
+<!-- ===================== SECTION 2: MICROECONOMICS ===================== -->
+<div id="section-micro" class="section-panel">
+  <div class="section-header micro">
+    <div class="section-emoji">🔬</div>
+    <div>
+      <div class="section-title">Microeconomics</div>
+      <div class="section-desc">How individuals and firms make decisions — pricing, consumer behaviour, market equilibrium, and policy distortions.</div>
+      <div class="section-tags">
+        <span class="badge badge-core">Core</span>
+        <span style="font-size:13px;color:var(--text-muted);">7 topics · ~2 hrs</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-nav">
+    <button class="sub-tab active" data-parent="micro" onclick="switchPanel('micro','theory')" data-panel="theory">Theory Overview</button>
+    <button class="sub-tab" data-parent="micro" onclick="switchPanel('micro','consumer')" data-panel="consumer">Consumer Behaviour</button>
+    <button class="sub-tab" data-parent="micro" onclick="switchPanel('micro','demsup')" data-panel="demsup">Demand & Supply</button>
+    <button class="sub-tab" data-parent="micro" onclick="switchPanel('micro','mkteffects')" data-panel="mkteffects">Market Effects</button>
+    <button class="sub-tab" data-parent="micro" onclick="switchPanel('micro','elasticity')" data-panel="elasticity">Elasticity</button>
+    <button class="sub-tab" data-parent="micro" onclick="switchPanel('micro','distort')" data-panel="distort">Distortions & Policy</button>
+    <button class="sub-tab" data-parent="micro" onclick="switchPanel('micro','producer')" data-panel="producer">Producer Theory</button>
+    <button class="sub-tab" data-parent="micro" onclick="switchPanel('micro','bizycle')" data-panel="bizycle">Business Cycle Basics</button>
+  </div>
+
+  <!-- Panel: Theory Overview -->
+  <div id="micro-theory" class="panel active">
+    <div class="card">
+      <div class="card-title">Microeconomic Theory — The Big Picture <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p>Microeconomics is built on a single powerful idea: <strong>rational agents maximise their objectives subject to constraints</strong>.</p>
+        <ul>
+          <li>Consumers maximise <strong>utility</strong> subject to a <strong>budget constraint</strong></li>
+          <li>Firms maximise <strong>profit</strong> subject to <strong>cost constraints</strong></li>
+          <li>Markets coordinate these decisions through <strong>prices</strong></li>
+        </ul>
+        <p>When these decisions interact in a market, they produce an <strong>equilibrium price and quantity</strong>. Understanding why this equilibrium forms — and breaks down — is the core of micro.</p>
+
+        <div class="pillar-grid">
+          <div class="pillar" style="background:rgba(59,130,246,0.07);border-color:var(--micro-border)">
+            <div class="pillar-icon">👤</div>
+            <div class="pillar-name">Consumer Theory</div>
+            <div class="pillar-desc">How do people choose what to buy? Utility, indifference curves, budget constraints, revealed preferences.</div>
+          </div>
+          <div class="pillar" style="background:rgba(16,185,129,0.07);border-color:var(--basics-border)">
+            <div class="pillar-icon">📉</div>
+            <div class="pillar-name">Demand & Supply</div>
+            <div class="pillar-desc">Market equilibrium. How prices and quantities are determined. The engine of market economics.</div>
+          </div>
+          <div class="pillar" style="background:rgba(167,139,250,0.07);border-color:var(--macro-border)">
+            <div class="pillar-icon">🏭</div>
+            <div class="pillar-name">Producer Theory</div>
+            <div class="pillar-desc">Costs of production, profit maximisation, supply decisions. (See What You Missed for market structures.)</div>
+          </div>
+        </div>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 FYI — The Price Mechanism</div>
+          Adam Smith called it the "invisible hand." Prices coordinate millions of individual decisions — no central planner needed. When tomatoes are scarce, prices rise; farmers grow more; shortage resolves. This self-correcting mechanism is the marvel of market economics.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Consumer Behaviour -->
+  <div id="micro-consumer" class="panel">
+    <div class="card">
+      <div class="card-title">Utility & The Law of Diminishing Marginal Utility <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p><strong>Utility (U)</strong>: The satisfaction or benefit a consumer receives from consuming a good or service. Measured in hypothetical units called "utils."</p>
+        <p><strong>Total Utility (TU)</strong>: Total satisfaction from consuming a given quantity of a good.</p>
+        <p><strong>Marginal Utility (MU)</strong>: The <em>additional</em> utility gained from consuming one more unit.</p>
+
+        <div class="formula-box">
+          <div class="f-label">Formula</div>
+          MU = ΔTU / ΔQ
+          <br><br>
+          Where: ΔTU = change in Total Utility, ΔQ = change in quantity (usually = 1)
+        </div>
+
+        <p><strong>Law of Diminishing Marginal Utility (DMU)</strong>: As a consumer consumes more of a good, the additional (marginal) utility from each successive unit decreases, ceteris paribus.</p>
+
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 Example — Chai</div>
+          <table>
+            <tr><th>Cups of Chai</th><th>Total Utility (utils)</th><th>Marginal Utility (utils)</th></tr>
+            <tr><td>1st cup</td><td>30</td><td>30</td></tr>
+            <tr><td>2nd cup</td><td>50</td><td>20</td></tr>
+            <tr><td>3rd cup</td><td>60</td><td>10</td></tr>
+            <tr><td>4th cup</td><td>62</td><td>2</td></tr>
+            <tr><td>5th cup</td><td>60</td><td>−2 (disutility!)</td></tr>
+          </table>
+          TU rises but at a decreasing rate. MU eventually becomes negative — you've had too much chai!
+        </div>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 Why it matters</div>
+          DMU explains why demand curves slope downward. As you consume more, each unit is worth less to you → you're only willing to pay less for each additional unit → hence lower price = higher quantity demanded.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Consumer Equilibrium — Equimarginal Principle <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p>A consumer with a fixed budget allocates spending across goods to <strong>maximise total utility</strong>. The optimal condition is:</p>
+        <div class="formula-box">
+          <div class="f-label">Consumer Equilibrium Condition</div>
+          MUₓ / Pₓ = MUᵧ / Pᵧ = ... = MUₙ / Pₙ
+          <br><br>
+          Marginal utility per rupee spent must be equal across all goods.
+          <br>Also written as: MUₓ / MUᵧ = Pₓ / Pᵧ
+        </div>
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 Example</div>
+          Priya has ₹100. She can buy tea (₹10/cup) or samosas (₹20/piece). If MU of tea = 20 utils and MU of samosa = 30 utils, then:
+          MU/P for tea = 20/10 = 2 utils/₹, MU/P for samosa = 30/20 = 1.5 utils/₹.
+          Tea gives more utility per rupee → she should buy more tea until MU/P equalises.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Indifference Curves & MRS <span class="badge badge-advanced">Advanced</span></div>
+      <div class="card-body">
+        <p>An <strong>Indifference Curve (IC)</strong> shows all combinations of two goods that give the consumer the <em>same level of utility</em>. The consumer is "indifferent" between these bundles.</p>
+        <p><strong>Properties of Indifference Curves:</strong></p>
+        <ul>
+          <li><strong>Downward sloping</strong>: More of one good requires less of the other to maintain same utility</li>
+          <li><strong>Convex to origin</strong>: Reflects DMU — as you consume more of good X, you're willing to give up less Y for one more X</li>
+          <li><strong>Non-intersecting</strong>: Two ICs cannot cross (would violate transitivity)</li>
+          <li><strong>Higher IC = higher utility</strong>: Curves farther from origin represent more of both goods</li>
+        </ul>
+
+        <!-- Indifference Curve SVG -->
+        <div class="diagram-wrap">
+          <div class="diagram-title">Indifference Curves & Budget Constraint</div>
+          <svg viewBox="0 0 420 320" xmlns="http://www.w3.org/2000/svg" style="max-width:420px;width:100%;">
+            <!-- Axes -->
+            <line x1="50" y1="280" x2="390" y2="280" stroke="#4e5d75" stroke-width="1.5"/>
+            <line x1="50" y1="280" x2="50" y2="20" stroke="#4e5d75" stroke-width="1.5"/>
+            <!-- Arrowheads -->
+            <polygon points="390,276 398,280 390,284" fill="#4e5d75"/>
+            <polygon points="46,20 50,12 54,20" fill="#4e5d75"/>
+            <!-- Axis labels -->
+            <text x="400" y="284" fill="#8d9bb5" font-size="13" text-anchor="middle">X</text>
+            <text x="38" y="16" fill="#8d9bb5" font-size="13" text-anchor="middle">Y</text>
+            <!-- IC1 -->
+            <path d="M 80 270 Q 110 190 150 150 Q 200 110 290 85" stroke="#3b82f6" stroke-width="2" fill="none"/>
+            <!-- IC2 -->
+            <path d="M 100 270 Q 135 195 180 155 Q 235 115 330 90" stroke="#60a5fa" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+            <!-- Budget Constraint -->
+            <line x1="60" y1="250" x2="320" y2="60" stroke="#34d399" stroke-width="2"/>
+            <!-- Tangency point -->
+            <circle cx="170" cy="145" r="5" fill="#fbbf24"/>
+            <!-- Labels -->
+            <text x="295" y="80" fill="#3b82f6" font-size="12">IC₂</text>
+            <text x="255" y="106" fill="#60a5fa" font-size="12">IC₁</text>
+            <text x="325" y="60" fill="#34d399" font-size="12">Budget</text>
+            <text x="178" y="140" fill="#fbbf24" font-size="11">E*</text>
+            <text x="155" y="165" fill="#fbbf24" font-size="10">(Optimal)</text>
+            <!-- Axis ticks -->
+            <text x="50" y="298" fill="#4e5d75" font-size="11" text-anchor="middle">0</text>
+            <text x="60" y="260" fill="#4e5d75" font-size="10" text-anchor="middle">Y-int</text>
+            <text x="320" y="296" fill="#4e5d75" font-size="10" text-anchor="middle">X-int</text>
+          </svg>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+            <span style="color:#3b82f6">■</span> Higher IC (IC₂) = more utility &nbsp;|&nbsp; 
+            <span style="color:#34d399">■</span> Budget constraint &nbsp;|&nbsp; 
+            <span style="color:#fbbf24">●</span> Optimal choice (tangency point E*)
+          </div>
+        </div>
+
+        <p><strong>MRS (Marginal Rate of Substitution)</strong>: The rate at which a consumer is willing to give up one good in exchange for another, keeping utility constant.</p>
+        <div class="formula-box">
+          <div class="f-label">MRS Formula</div>
+          MRS = −ΔY / ΔX = MUₓ / MUᵧ
+          <br><br>
+          MRS diminishes as we move along the IC (convexity assumption)
+        </div>
+
+        <div class="card-body">
+          <p><strong>Budget Constraint</strong>: Shows all combinations a consumer can afford given income (M) and prices.</p>
+          <div class="formula-box">
+            <div class="f-label">Budget Constraint</div>
+            Pₓ · X + Pᵧ · Y = M
+            <br>Slope = −Pₓ / Pᵧ (negative price ratio)
+            <br>X-intercept = M/Pₓ,  Y-intercept = M/Pᵧ
+          </div>
+          <p><strong>Consumer Optimum</strong> (tangency condition):</p>
+          <div class="formula-box">
+            <div class="f-label">Optimality Condition</div>
+            MRS = Pₓ / Pᵧ
+            <br>At optimum: slope of IC = slope of budget constraint
+          </div>
+        </div>
+
+        <div class="deep-box">
+          <div class="deep-label">🔮 Deep-dive — Corner Solutions</div>
+          When a consumer buys only one good (e.g., only rice, no vegetables), the optimum is at a corner of the budget line — MRS ≠ price ratio. This happens when goods are not substitutes (perfect complements) or the budget is too tight.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Demand & Supply -->
+  <div id="micro-demsup" class="panel">
+    <div class="card">
+      <div class="card-title">Law of Demand & Demand Curve <span class="badge badge-foundational">Foundational</span></div>
+      <div class="card-body">
+        <p><strong>Demand</strong>: The quantity of a good that consumers are <em>willing and able</em> to buy at each price, during a given time period, ceteris paribus.</p>
+        <p><strong>Law of Demand</strong>: There is an <em>inverse relationship</em> between price and quantity demanded — as price rises, Qd falls, and vice versa.</p>
+        <p>Reasons for this: (1) Substitution effect — as price rises, relatively cheaper substitutes are preferred. (2) Income effect — higher price reduces real purchasing power. (3) DMU — at higher consumption, extra unit is worth less.</p>
+
+        <div class="diagram-wrap">
+          <div class="diagram-title">Demand & Supply — Market Equilibrium</div>
+          <svg viewBox="0 0 420 300" xmlns="http://www.w3.org/2000/svg" style="max-width:420px;width:100%;">
+            <!-- Axes -->
+            <line x1="50" y1="265" x2="390" y2="265" stroke="#4e5d75" stroke-width="1.5"/>
+            <line x1="50" y1="265" x2="50" y2="20" stroke="#4e5d75" stroke-width="1.5"/>
+            <polygon points="390,261 398,265 390,269" fill="#4e5d75"/>
+            <polygon points="46,20 50,12 54,20" fill="#4e5d75"/>
+            <text x="400" y="269" fill="#8d9bb5" font-size="13">Q</text>
+            <text x="38" y="16" fill="#8d9bb5" font-size="13">P</text>
+            <!-- Demand curve -->
+            <line x1="80" y1="50" x2="360" y2="250" stroke="#f87171" stroke-width="2.5"/>
+            <!-- Supply curve -->
+            <line x1="80" y1="250" x2="360" y2="50" stroke="#34d399" stroke-width="2.5"/>
+            <!-- Equilibrium point -->
+            <circle cx="220" cy="150" r="6" fill="#fbbf24"/>
+            <!-- Dashed lines -->
+            <line x1="50" y1="150" x2="220" y2="150" stroke="#fbbf24" stroke-width="1" stroke-dasharray="4,4"/>
+            <line x1="220" y1="150" x2="220" y2="265" stroke="#fbbf24" stroke-width="1" stroke-dasharray="4,4"/>
+            <!-- Labels -->
+            <text x="365" y="248" fill="#f87171" font-size="13" font-weight="600">D</text>
+            <text x="365" y="48" fill="#34d399" font-size="13" font-weight="600">S</text>
+            <text x="230" y="145" fill="#fbbf24" font-size="12" font-weight="700">E*</text>
+            <text x="30" y="154" fill="#fbbf24" font-size="12">P*</text>
+            <text x="214" y="282" fill="#fbbf24" font-size="12">Q*</text>
+            <!-- Excess demand region label -->
+            <text x="80" y="200" fill="#60a5fa" font-size="11">Excess</text>
+            <text x="80" y="215" fill="#60a5fa" font-size="11">Demand</text>
+            <!-- Excess supply region label -->
+            <text x="270" y="100" fill="#c084fc" font-size="11">Excess</text>
+            <text x="270" y="115" fill="#c084fc" font-size="11">Supply</text>
+          </svg>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:8px;">
+            <span style="color:#f87171">■</span> Demand (D) — slopes down &nbsp;|&nbsp;
+            <span style="color:#34d399">■</span> Supply (S) — slopes up &nbsp;|&nbsp;
+            <span style="color:#fbbf24">●</span> Equilibrium (E*)
+          </div>
+        </div>
+
+        <p><strong>Shifts in Demand</strong> (the whole curve moves — not just along it):</p>
+        <ul>
+          <li>↑ Income (for normal goods) → demand shifts right (↑D)</li>
+          <li>Rise in price of substitute → demand shifts right</li>
+          <li>Fall in price of complement → demand shifts right</li>
+          <li>↑ Population, ↑ Positive expectations → demand shifts right</li>
+          <li>Change in tastes/preferences</li>
+        </ul>
+
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 Onion Example, 2023</div>
+          Floods in Maharashtra and Karnataka destroyed onion crops → supply fell sharply → supply curve shifted left → with same demand, prices shot to ₹100–200/kg. This is a <em>shift in supply</em>, not a movement along it.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Law of Supply & Equilibrium <span class="badge badge-foundational">Foundational</span></div>
+      <div class="card-body">
+        <p><strong>Law of Supply</strong>: There is a <em>positive relationship</em> between price and quantity supplied — as price rises, Qs increases.</p>
+        <p>Reason: Higher price = higher profit margin = more incentive to produce.</p>
+        <p><strong>Shifts in Supply</strong>:</p>
+        <ul>
+          <li>↓ Cost of production (cheaper raw materials) → supply shifts right</li>
+          <li>Better technology → supply shifts right</li>
+          <li>Government subsidy → supply shifts right</li>
+          <li>Favourable weather (agriculture) → supply shifts right</li>
+        </ul>
+        <p><strong>Equilibrium</strong>: Where Qd = Qs. The market "clears" — no excess demand or supply.</p>
+        <ul>
+          <li><strong>Excess Demand</strong> (shortage): Qd > Qs → price rises → Qd falls, Qs rises → equilibrium restored</li>
+          <li><strong>Excess Supply</strong> (surplus): Qs > Qd → price falls → Qs falls, Qd rises → equilibrium restored</li>
+        </ul>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 Price Ceiling & Floor</div>
+          <strong>Price Ceiling</strong> (max price, like rent control): set below equilibrium → creates <em>excess demand</em> (shortage). E.g., India's essential commodities price caps.<br>
+          <strong>Price Floor</strong> (min price, like MSP): set above equilibrium → creates <em>excess supply</em>. E.g., India's Minimum Support Price for wheat ensures farmers sell at a minimum price — but can lead to government surplus stock.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Market Effects -->
+  <div id="micro-mkteffects" class="panel">
+    <div class="card">
+      <div class="card-title">Substitution Effect & Income Effect <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p>When the price of a good changes, two effects operate simultaneously:</p>
+        <div class="grid-2">
+          <div class="pillar" style="background:rgba(59,130,246,0.07);border-color:var(--micro-border)">
+            <div class="pillar-name">Substitution Effect</div>
+            <div class="pillar-desc">When the price of good X rises, it becomes relatively more expensive than substitutes. Consumers substitute away from X → demand for X falls. Always negative (opposite direction to price change).</div>
+          </div>
+          <div class="pillar" style="background:rgba(16,185,129,0.07);border-color:var(--basics-border)">
+            <div class="pillar-name">Income Effect</div>
+            <div class="pillar-desc">When price of X rises, real purchasing power falls — as if income fell. For normal goods: demand falls further. For inferior goods: demand may rise (real income fall → buy more inferior good).</div>
+          </div>
+        </div>
+
+        <table>
+          <tr><th>Good Type</th><th>Substitution Effect</th><th>Income Effect</th><th>Net Effect on Demand</th></tr>
+          <tr><td><strong>Normal good</strong></td><td>Negative (↓Qd)</td><td>Negative (↓Qd)</td><td>Both reinforce — Demand curve slopes ↓</td></tr>
+          <tr><td><strong>Inferior good</strong></td><td>Negative (↓Qd)</td><td>Positive (↑Qd)</td><td>SE > IE → Demand curve slopes ↓</td></tr>
+          <tr><td><strong>Giffen good</strong></td><td>Negative (↓Qd)</td><td>Positive (↑Qd)</td><td>IE > SE → Demand curve slopes ↑ (!)  </td></tr>
+        </table>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 Giffen Goods</div>
+          Named after Sir Robert Giffen who observed that when bread prices rose in 19th century England, poor people bought <em>more</em> bread — because they could no longer afford meat. In India, this is observed with coarse grains like jowar/bajra among very poor households. Giffen goods are theoretically fascinating but empirically rare.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Consumer Surplus & Willingness to Pay <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p><strong>Willingness to Pay (WTP)</strong>: The maximum price a consumer would voluntarily pay for a good. Reflects their subjective valuation.</p>
+        <p><strong>Consumer Surplus (CS)</strong>: The difference between what a consumer is willing to pay and what they actually pay.</p>
+
+        <div class="formula-box">
+          <div class="f-label">Consumer Surplus</div>
+          CS = WTP − Actual Price Paid
+          <br><br>
+          In a market: CS = Area of triangle above price line & below demand curve
+          <br>CS = ½ × Base × Height = ½ × Q* × (P_max − P*)
+        </div>
+
+        <div class="diagram-wrap">
+          <div class="diagram-title">Consumer Surplus (shaded region)</div>
+          <svg viewBox="0 0 360 260" xmlns="http://www.w3.org/2000/svg" style="max-width:360px;width:100%;">
+            <line x1="40" y1="230" x2="340" y2="230" stroke="#4e5d75" stroke-width="1.5"/>
+            <line x1="40" y1="230" x2="40" y2="20" stroke="#4e5d75" stroke-width="1.5"/>
+            <!-- Demand curve (straight line for simplicity) -->
+            <line x1="60" y1="40" x2="320" y2="220" stroke="#f87171" stroke-width="2"/>
+            <!-- Market price line -->
+            <line x1="40" y1="140" x2="250" y2="140" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="5,4"/>
+            <!-- Vertical line at Q* -->
+            <line x1="250" y1="140" x2="250" y2="230" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="5,4"/>
+            <!-- Consumer Surplus shaded region -->
+            <polygon points="60,40 250,140 60,140" fill="rgba(59,130,246,0.2)" stroke="none"/>
+            <!-- Labels -->
+            <text x="325" y="224" fill="#f87171" font-size="13" font-weight="600">D</text>
+            <text x="20" y="144" fill="#fbbf24" font-size="12">P*</text>
+            <text x="55" y="38" fill="#fbbf24" font-size="12">P_max</text>
+            <text x="244" y="248" fill="#fbbf24" font-size="12">Q*</text>
+            <text x="100" y="105" fill="#60a5fa" font-size="13" font-weight="600">CS</text>
+            <text x="100" y="120" fill="#60a5fa" font-size="11">(Benefit to</text>
+            <text x="100" y="133" fill="#60a5fa" font-size="11">consumers)</text>
+          </svg>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">Blue triangle = Consumer Surplus at market price P*</div>
+        </div>
+
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 Example — Airline Tickets</div>
+          Rahul is willing to pay ₹8,000 for a Mumbai-Delhi flight. IndiGo charges ₹5,500. His consumer surplus = ₹2,500. Anita was willing to pay only ₹5,000 → she doesn't buy. Price discrimination (business vs economy class) is airlines' way of capturing consumer surplus.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Elasticity -->
+  <div id="micro-elasticity" class="panel">
+    <div class="card">
+      <div class="card-title">Price Elasticity of Demand (PED) <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p>PED measures the <em>responsiveness of quantity demanded</em> to a change in price.</p>
+        <div class="formula-box">
+          <div class="f-label">Price Elasticity of Demand</div>
+          PED = % Change in Qd / % Change in P
+          <br>PED = (ΔQd/Qd) / (ΔP/P)
+          <br><br>
+          PED is always negative (law of demand), but we usually report its absolute value.
+        </div>
+
+        <table>
+          <tr><th>Type</th><th>|PED| value</th><th>Meaning</th><th>Example</th></tr>
+          <tr><td>Perfectly inelastic</td><td>0</td><td>Qd doesn't change at all</td><td>Insulin, emergency medicines</td></tr>
+          <tr><td>Inelastic</td><td>0 to 1</td><td>Qd changes less than proportionally to price</td><td>Petrol, salt, onions (short run)</td></tr>
+          <tr><td>Unit elastic</td><td>= 1</td><td>Qd changes proportionally</td><td>Theoretical construct</td></tr>
+          <tr><td>Elastic</td><td>1 to ∞</td><td>Qd changes more than proportionally</td><td>Luxury cars, branded clothing</td></tr>
+          <tr><td>Perfectly elastic</td><td>∞</td><td>Any price rise → zero demand</td><td>Perfect competition (theoretical)</td></tr>
+        </table>
+
+        <p><strong>Total Revenue (TR) Test</strong>:</p>
+        <div class="formula-box">
+          <div class="f-label">Total Revenue Effect</div>
+          TR = P × Q
+          <br><br>
+          Elastic demand:   Price ↑ → TR ↓  (quantity falls more than price rises)
+          Inelastic demand: Price ↑ → TR ↑  (quantity falls less than price rises)
+          Unit elastic:     Price ↑ → TR unchanged
+        </div>
+
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 Example — Petrol Tax</div>
+          India's petrol demand is inelastic in the short run (people need to commute). So when the government raised excise duty on petrol, revenue went up — despite some fall in consumption. In the long run, demand becomes more elastic as people switch to CNG, EVs, public transport.
+        </div>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 Determinants of PED</div>
+          1. <strong>Availability of substitutes</strong>: More substitutes → more elastic (e.g., Pepsi vs. cola). Few substitutes → inelastic (medicines). <br>
+          2. <strong>Necessity vs. luxury</strong>: Necessities are inelastic; luxuries elastic.<br>
+          3. <strong>Time period</strong>: Demand is more elastic in the long run (time to adjust).<br>
+          4. <strong>Proportion of income</strong>: Higher share of income → more elastic (e.g., car vs. newspaper).
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Income Elasticity (YED) & Cross-Price Elasticity (XED) <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <div class="formula-box">
+          <div class="f-label">Income Elasticity of Demand (YED)</div>
+          YED = % Change in Qd / % Change in Income
+          <br><br>
+          YED > 0  → Normal good (demand rises with income)
+          YED > 1  → Luxury good (demand rises faster than income)
+          YED < 0  → Inferior good (demand falls as income rises)
+          0 < YED < 1 → Necessity (demand rises slowly with income)
+        </div>
+
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 Indian Context — Engel's Law</div>
+          As incomes rise in India, the share of expenditure on food falls (though absolute spending rises) — Engel's Law. Demand for motor vehicles (YED > 1) has surged as India's middle class grows. Meanwhile, coarse grain (jowar, bajra) demand falls — classic inferior goods.
+        </div>
+
+        <div class="formula-box">
+          <div class="f-label">Cross-Price Elasticity of Demand (XED)</div>
+          XED(A,B) = % Change in Qd of A / % Change in Price of B
+          <br><br>
+          XED > 0 → A and B are substitutes (e.g., tea and coffee)
+          XED < 0 → A and B are complements (e.g., cars and petrol)
+          XED = 0 → Unrelated goods
+        </div>
+
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 Example — Substitutes & Complements</div>
+          Tea and coffee in India are substitutes — if Tata Tea prices rise, demand for Nescafé rises (XED > 0). Cars and petrol are complements — if petrol prices spike, demand for large SUVs falls (XED < 0). This is why Maruti Suzuki watches crude oil prices closely.
+        </div>
+      </div>
+    </div>
+
+    <!-- CALCULATOR -->
+    <div class="calc-box">
+      <div class="calc-title">🧮 Elasticity Calculator</div>
+      <div style="margin-bottom:16px;">
+        <select id="elastType" style="background:var(--bg-card);border:1px solid var(--border-med);border-radius:7px;padding:9px 12px;color:var(--text-primary);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;cursor:pointer;">
+          <option value="ped">Price Elasticity of Demand (PED)</option>
+          <option value="yed">Income Elasticity (YED)</option>
+          <option value="xed">Cross-Price Elasticity (XED)</option>
+        </select>
+      </div>
+      <div class="calc-grid">
+        <div class="input-group">
+          <label id="calcLabel1">% Change in Quantity Demanded</label>
+          <input class="calc-input" id="calcIn1" type="number" placeholder="e.g. -20" step="any">
+        </div>
+        <div class="input-group">
+          <label id="calcLabel2">% Change in Price</label>
+          <input class="calc-input" id="calcIn2" type="number" placeholder="e.g. 10" step="any">
+        </div>
+      </div>
+      <button class="calc-btn primary" onclick="calcElasticity()">Calculate →</button>
+      <div class="calc-result" id="elastResult"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Durable Goods & Elasticity <span class="badge badge-advanced">Advanced</span></div>
+      <div class="card-body">
+        <p><strong>Durable goods</strong> (refrigerators, cars, TVs) have <em>high elasticity</em> because:</p>
+        <ul>
+          <li>Purchases can be postponed — consumers wait for price drops</li>
+          <li>Used market exists as a substitute</li>
+          <li>They represent large shares of income</li>
+        </ul>
+        <p>This creates a policy challenge: taxing durable goods can sharply reduce their demand and hurt producers disproportionately.</p>
+        <div class="fyi-box">
+          <div class="fyi-label">💡 FYI — Dorfman-Steiner Theorem</div>
+          Firms with inelastic demand should spend more on advertising. A luxury brand like Louis Vuitton can charge high prices (low PED) but must advertise heavily to maintain the image that keeps demand inelastic.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Distortions & Policy -->
+  <div id="micro-distort" class="panel">
+    <div class="card">
+      <div class="card-title">Externalities <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p>An <strong>externality</strong> occurs when a market transaction creates costs or benefits for third parties — people not involved in the transaction. Externalities cause <em>market failure</em> — the market price doesn't reflect true social costs/benefits.</p>
+        <div class="grid-2">
+          <div class="pillar" style="background:rgba(248,113,113,0.07);border-color:rgba(248,113,113,0.3)">
+            <div class="pillar-name">Negative Externality</div>
+            <div class="pillar-desc">Third-party <em>cost</em>. Social Cost > Private Cost → Market over-produces. Example: Factory pollution in the Ganga. MSC > MPC → output too high.</div>
+          </div>
+          <div class="pillar" style="background:rgba(16,185,129,0.07);border-color:var(--basics-border)">
+            <div class="pillar-name">Positive Externality</div>
+            <div class="pillar-desc">Third-party <em>benefit</em>. Social Benefit > Private Benefit → Market under-produces. Example: Education — benefits not just the student but society. MSB > MPB → output too low.</div>
+          </div>
+        </div>
+        <div class="formula-box">
+          <div class="f-label">Externality Concepts</div>
+          MSC = MPC + Marginal External Cost  (negative externality)
+          MSB = MPB + Marginal External Benefit (positive externality)
+          <br>
+          Social Optimum: MSC = MSB
+          Market Outcome: MPC = MPB (ignores externality)
+        </div>
+        <p><strong>Pigouvian Tax/Subsidy</strong>: Government can "internalise" externalities by taxing negative externalities (carbon tax) or subsidising positive ones (education grants).</p>
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 Examples</div>
+          <strong>Negative</strong>: Delhi's vehicular pollution. The social cost of driving (smog, health damage) far exceeds the private cost (fuel + car maintenance). Odd-even scheme, BS-VI norms try to reduce this.<br><br>
+          <strong>Positive</strong>: India's vaccination programmes. A vaccinated person protects others too (herd immunity). Without government subsidies, vaccination would be under-provided.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Network Effects: Bandwagon & Snob Effects <span class="badge badge-advanced">Advanced</span></div>
+      <div class="card-body">
+        <p>Standard demand theory assumes consumers' choices are independent. In reality, they often aren't:</p>
+        <div class="grid-2">
+          <div class="pillar" style="background:rgba(59,130,246,0.07);border-color:var(--micro-border)">
+            <div class="pillar-name">Bandwagon Effect</div>
+            <div class="pillar-desc">Demand increases because others are also buying. ("Everyone has it, so I want it.") Makes demand <em>more elastic</em> to price rises. Example: WhatsApp, Jio SIM cards, UPI payments.</div>
+          </div>
+          <div class="pillar" style="background:rgba(167,139,250,0.07);border-color:var(--macro-border)">
+            <div class="pillar-name">Snob Effect</div>
+            <div class="pillar-desc">Demand decreases as more people buy. ("I want it because it's exclusive.") Makes demand <em>less responsive</em> to price cuts. Example: Luxury watches, rare artwork, first-edition books.</div>
+          </div>
+        </div>
+        <div class="fyi-box">
+          <div class="fyi-label">💡 Veblen Goods</div>
+          Goods for which demand increases as price rises — because high price signals status. Named after Thorstein Veblen. Example: Rolex, high-end diamond jewellery. The demand curve can slope upward for these goods.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Say's Law & Paradox of Public Policy <span class="badge badge-advanced">Advanced</span></div>
+      <div class="card-body">
+        <p><strong>Say's Law</strong>: "Supply creates its own demand." Jean-Baptiste Say (1803) argued that producing goods automatically generates income to buy them — the economy naturally tends to full employment. This is the classical view.</p>
+        <p>Keynes challenged this: demand can fall short of supply → recession. "Supply does NOT always create its own demand."</p>
+        <div class="fyi-box">
+          <div class="fyi-label">💡 Paradox of Thrift (Keynes)</div>
+          If one person saves more, they're prudent. But if <em>everyone</em> saves more simultaneously, aggregate demand falls, firms earn less, they cut wages, and savings actually fall in aggregate. What's rational individually is harmful collectively — a classic macro paradox.
+        </div>
+        <p><strong>Paradox of Public Policy</strong>: Government intervention, though well-intentioned, can create unintended consequences:</p>
+        <ul>
+          <li><strong>Rent Control</strong>: Intended to protect tenants → landlords don't invest → housing stock deteriorates → housing shortage worsens</li>
+          <li><strong>Minimum Wage</strong>: Intended to help workers → some firms reduce hiring → unemployment can rise</li>
+          <li><strong>MSP in India</strong>: Intended to protect farmers → creates excess supply → FCI accumulates grain it can't distribute efficiently</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Producer Theory -->
+  <div id="micro-producer" class="panel">
+    <div class="card">
+      <div class="card-title">Cost Concepts — Fixed, Variable & Total <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p>A firm's costs determine how much it supplies and at what price. Understanding cost structure is central to supply-side economics.</p>
+        <div class="formula-box">
+          <div class="f-label">Cost Formulas</div>
+          TC  = TFC + TVC          (Total Cost = Fixed + Variable)
+          MC  = ΔTC / ΔQ           (Marginal Cost = change in TC per unit)
+          ATC = TC / Q             (Average Total Cost)
+          AFC = TFC / Q            (Average Fixed Cost — always falls)
+          AVC = TVC / Q            (Average Variable Cost)
+          ATC = AFC + AVC
+        </div>
+        <div class="diagram-wrap">
+          <div class="diagram-title">Short-Run Cost Curves — U-shaped ATC & MC</div>
+          <svg viewBox="0 0 420 270" xmlns="http://www.w3.org/2000/svg" style="max-width:420px;width:100%;">
+            <line x1="50" y1="240" x2="400" y2="240" stroke="#4e5d75" stroke-width="1.5"/>
+            <line x1="50" y1="240" x2="50" y2="20" stroke="#4e5d75" stroke-width="1.5"/>
+            <polygon points="400,236 408,240 400,244" fill="#4e5d75"/>
+            <polygon points="46,20 50,12 54,20" fill="#4e5d75"/>
+            <text x="410" y="244" fill="#8d9bb5" font-size="12">Q</text>
+            <text x="35" y="16" fill="#8d9bb5" font-size="12">Cost</text>
+            <!-- MC curve — J/U shape, intersects ATC at minimum -->
+            <path d="M 70 180 Q 130 100 180 120 Q 240 145 340 50" stroke="#f87171" stroke-width="2" fill="none"/>
+            <!-- AVC — U shape, above MC trough -->
+            <path d="M 70 200 Q 160 150 220 155 Q 290 165 380 120" stroke="#fbbf24" stroke-width="2" fill="none"/>
+            <!-- ATC — U shape, higher than AVC -->
+            <path d="M 70 230 Q 170 160 240 158 Q 310 162 390 125" stroke="#34d399" stroke-width="2" fill="none"/>
+            <!-- AFC — always declining -->
+            <path d="M 70 220 Q 150 130 250 90 Q 320 75 390 68" stroke="#60a5fa" stroke-width="1.5" fill="none" stroke-dasharray="5,3"/>
+            <!-- Min ATC point -->
+            <circle cx="240" cy="158" r="4" fill="#34d399"/>
+            <!-- MC-ATC intersection vertical -->
+            <line x1="240" y1="158" x2="240" y2="240" stroke="#34d399" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+            <text x="390" y="46" fill="#f87171" font-size="11">MC</text>
+            <text x="385" y="118" fill="#fbbf24" font-size="11">AVC</text>
+            <text x="390" y="123" fill="#34d399" font-size="11" dy="13">ATC</text>
+            <text x="392" y="66" fill="#60a5fa" font-size="11">AFC</text>
+            <text x="230" y="252" fill="#34d399" font-size="10">Q_min(ATC)</text>
+            <text x="110" y="108" fill="#f87171" font-size="10">MC cuts ATC</text>
+            <text x="110" y="120" fill="#f87171" font-size="10">at its minimum</text>
+          </svg>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">
+            <span style="color:#f87171">■</span> MC &nbsp;|&nbsp;
+            <span style="color:#fbbf24">■</span> AVC &nbsp;|&nbsp;
+            <span style="color:#34d399">■</span> ATC &nbsp;|&nbsp;
+            <span style="color:#60a5fa">╌</span> AFC (always falling)
+          </div>
+        </div>
+        <p><strong>Key Rules</strong>:</p>
+        <ul>
+          <li>MC always passes through the <em>minimum point</em> of both AVC and ATC</li>
+          <li>When MC &lt; ATC → ATC is falling. When MC &gt; ATC → ATC is rising</li>
+          <li>AFC always falls (fixed costs spread over more units)</li>
+          <li>Short run: at least one input fixed (usually capital). Long run: all inputs variable</li>
+        </ul>
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 Example — Small Steel Plant</div>
+          A steel plant in Jharkhand has a blast furnace (fixed cost: ₹100 crore/yr regardless of output). Labour and raw material are variable. As output rises, AFC falls sharply. Initially, specialisation raises efficiency (MC falls); but eventually congestion and bottlenecks raise MC again — classic U-shaped curve.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Profit Maximisation — MR = MC Rule <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p>A firm maximises profit where <strong>Marginal Revenue = Marginal Cost</strong>. At this output, the extra revenue from one more unit just equals the extra cost — no more gain from producing further.</p>
+        <div class="formula-box">
+          <div class="f-label">Profit Maximisation</div>
+          π  = TR − TC               (Profit = Total Revenue − Total Cost)
+          MR = dTR/dQ = P (for perfect competition, since P is constant)
+          MC = dTC/dQ
+          Optimal: MR = MC
+          <br><br>
+          Shut-down condition (short run): P &lt; AVC → firm shuts down (can't cover variable costs)
+          Break-even:  P = ATC → zero economic profit (normal profit only)
+          Supernormal profit: P &gt; ATC → TR &gt; TC
+        </div>
+
+        <table>
+          <tr><th>Condition</th><th>P vs ATC/AVC</th><th>Firm Decision</th></tr>
+          <tr><td>Supernormal profit</td><td>P &gt; ATC</td><td>Produce; new firms enter in long run</td></tr>
+          <tr><td>Normal profit (break-even)</td><td>P = ATC</td><td>Produce; no entry/exit incentive</td></tr>
+          <tr><td>Loss but covers VC</td><td>AVC &lt; P &lt; ATC</td><td>Produce in short run (covers VC, partial FC)</td></tr>
+          <tr><td>Shut-down point</td><td>P = AVC</td><td>Indifferent; loss = TFC either way</td></tr>
+          <tr><td>Shut down</td><td>P &lt; AVC</td><td>Shut down — producing only deepens loss</td></tr>
+        </table>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 Economic Profit vs Accounting Profit</div>
+          <strong>Accounting profit</strong> = Revenue − Explicit (cash) costs.<br>
+          <strong>Economic profit</strong> = Revenue − Explicit costs − <em>Implicit costs</em> (opportunity costs like owner's foregone salary, own capital).<br>
+          In long-run perfect competition, economic profit → 0. Firms earn only "normal profit" — enough to keep them in the industry, but no excess.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Returns to Scale & Economies of Scale <span class="badge badge-advanced">Advanced</span></div>
+      <div class="card-body">
+        <div class="formula-box">
+          <div class="f-label">Returns to Scale (Long Run)</div>
+          If inputs increase by λ and output increases by:
+          &gt; λ → Increasing Returns to Scale (IRS) — economies of scale
+          = λ → Constant Returns to Scale (CRS)
+          &lt; λ → Decreasing Returns to Scale (DRS) — diseconomies of scale
+        </div>
+        <p><strong>Economies of Scale</strong>: Long-run ATC falls as output rises. Reasons: specialisation, bulk buying, spreading fixed costs, technology.</p>
+        <p><strong>Diseconomies of Scale</strong>: Long-run ATC rises beyond some output. Reasons: management complexity, coordination failures, communication breakdowns in large organisations.</p>
+        <p><strong>Minimum Efficient Scale (MES)</strong>: The lowest output at which long-run ATC is minimised. Industries with high MES tend toward oligopoly or monopoly (natural monopoly if MES covers entire market demand).</p>
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 Indian Context</div>
+          Reliance Jio achieved massive economies of scale — ₹1.5 lakh crore network built once, then amortised across 450+ million subscribers. Per-user cost falls dramatically. This created a natural entry barrier: newcomers can't replicate the cost structure. TRAI had to balance competition vs. network investment incentives.
+        </div>
+      </div>
+    </div>
+
+    <!-- Cost Calculator -->
+    <div class="calc-box">
+      <div class="calc-title">🧮 Cost & Profit Calculator</div>
+      <div class="calc-grid">
+        <div class="input-group"><label>Total Fixed Cost (TFC) — ₹</label><input class="calc-input" id="tfc" type="number" placeholder="e.g. 50000"></div>
+        <div class="input-group"><label>Total Variable Cost (TVC) — ₹</label><input class="calc-input" id="tvc" type="number" placeholder="e.g. 30000"></div>
+        <div class="input-group"><label>Quantity (Q)</label><input class="calc-input" id="qty_prod" type="number" placeholder="e.g. 1000"></div>
+        <div class="input-group"><label>Market Price per unit (P) — ₹</label><input class="calc-input" id="price_prod" type="number" placeholder="e.g. 95"></div>
+      </div>
+      <button class="calc-btn primary" onclick="calcProfit()">Calculate →</button>
+      <div class="calc-result" id="profitResult"></div>
+    </div>
+  </div>
+
+  <!-- Panel: Business Cycle -->
+  <div id="micro-bizycle" class="panel">
+    <div class="card">
+      <div class="card-title">Business Cycle & Recession Basics <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p>The <strong>business cycle</strong> refers to the fluctuations in economic activity (GDP, employment, inflation) over time. It has recurring phases:</p>
+
+        <div class="diagram-wrap">
+          <div class="diagram-title">Business Cycle Phases</div>
+          <svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg" style="max-width:500px;width:100%;">
+            <!-- Trend line -->
+            <line x1="30" y1="130" x2="470" y2="80" stroke="#4e5d75" stroke-width="1" stroke-dasharray="6,4"/>
+            <!-- Cycle curve -->
+            <path d="M 30 130 Q 100 70 160 100 Q 220 130 280 60 Q 340 0 390 60 Q 430 100 470 80"
+                  stroke="#3b82f6" stroke-width="2.5" fill="none"/>
+            <!-- Shading for recession -->
+            <rect x="155" y="0" width="70" height="200" fill="rgba(248,113,113,0.08)"/>
+            <rect x="370" y="0" width="50" height="200" fill="rgba(248,113,113,0.08)"/>
+            <!-- Phase labels -->
+            <text x="50" y="90" fill="#34d399" font-size="11">Expansion</text>
+            <text x="165" y="15" fill="#f87171" font-size="11">Recession</text>
+            <text x="230" y="50" fill="#34d399" font-size="11">Recovery</text>
+            <text x="290" y="15" fill="#fbbf24" font-size="11">Peak</text>
+            <text x="375" y="165" fill="#f87171" font-size="11">Trough</text>
+            <!-- Y axis label -->
+            <text x="10" y="105" fill="#8d9bb5" font-size="11" transform="rotate(-90, 10, 105)">GDP</text>
+            <!-- Trend label -->
+            <text x="455" y="70" fill="#4e5d75" font-size="10">Trend</text>
+          </svg>
+        </div>
+
+        <table>
+          <tr><th>Phase</th><th>What happens</th><th>Indian Indicator</th></tr>
+          <tr><td><strong>Expansion</strong></td><td>GDP grows, employment rises, investment picks up</td><td>IIP (Index of Industrial Production) rises, credit growth high</td></tr>
+          <tr><td><strong>Peak</strong></td><td>Highest point of economic activity, inflation often high</td><td>RBI begins raising rates; Sensex near highs</td></tr>
+          <tr><td><strong>Recession</strong></td><td>GDP contracts (typically 2 consecutive quarters of negative growth), unemployment rises</td><td>India rarely has formal recession; IIP falls, PMI below 50</td></tr>
+          <tr><td><strong>Trough</strong></td><td>Lowest point; economy at most depressed state</td><td>FY2020-21 India: −6.6% GDP growth (COVID)</td></tr>
+        </table>
+
+        <p><strong>Causes of Recession</strong>:</p>
+        <ul>
+          <li><strong>Demand shock</strong>: Sharp fall in consumer confidence or spending (COVID lockdowns)</li>
+          <li><strong>Supply shock</strong>: Oil price spike, war disruption (1973 OPEC crisis)</li>
+          <li><strong>Financial crisis</strong>: Bank failures, credit crunch (2008 global financial crisis)</li>
+          <li><strong>Policy error</strong>: Excessive tightening by central bank (US 2022–23 rate hikes)</li>
+          <li><strong>External shock</strong>: Export demand collapse, global slowdown</li>
+        </ul>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 India's COVID Recession (FY21)</div>
+          India's GDP contracted by 6.6% in FY2020-21 — worst since independence. The cause: massive demand shock (lockdowns) + supply disruption. The recovery (V-shaped) was driven by pent-up demand, vaccination, and government stimulus (PMGKP, ₹20 lakh crore package).
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END MICRO -->
+
+<!-- ===================== SECTION 3: MACROECONOMICS ===================== -->
+<div id="section-macro" class="section-panel">
+  <div class="section-header macro">
+    <div class="section-emoji">🌍</div>
+    <div>
+      <div class="section-title">Macroeconomics</div>
+      <div class="section-desc">The economy as a whole — GDP, inflation, unemployment, models, and policy.</div>
+      <div class="section-tags">
+        <span class="badge badge-core">Core</span>
+        <span class="badge badge-advanced">Advanced</span>
+        <span style="font-size:13px;color:var(--text-muted);">8 topics · ~3 hrs</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-nav">
+    <button class="sub-tab active" data-parent="macro" onclick="switchPanel('macro','mtheory')" data-panel="mtheory">Theory Overview</button>
+    <button class="sub-tab" data-parent="macro" onclick="switchPanel('macro','gdp')" data-panel="gdp">GDP & National Income</button>
+    <button class="sub-tab" data-parent="macro" onclick="switchPanel('macro','infunemp')" data-panel="infunemp">Inflation & Unemployment</button>
+    <button class="sub-tab" data-parent="macro" onclick="switchPanel('macro','foundations')" data-panel="foundations">Macro Foundations</button>
+    <button class="sub-tab" data-parent="macro" onclick="switchPanel('macro','models')" data-panel="models">Markets & Models</button>
+    <button class="sub-tab" data-parent="macro" onclick="switchPanel('macro','time')" data-panel="time">Time Horizons</button>
+    <button class="sub-tab" data-parent="macro" onclick="switchPanel('macro','policy')" data-panel="policy">Fiscal Policy</button>
+    <button class="sub-tab" data-parent="macro" onclick="switchPanel('macro','openeco')" data-panel="openeco">Open Economy</button>
+  </div>
+
+  <!-- Panel: Theory -->
+  <div id="macro-mtheory" class="panel active">
+    <div class="card">
+      <div class="card-title">Macroeconomics — The Big Picture <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p>Macroeconomics was born from the <strong>Great Depression (1929–33)</strong> — when classical economics failed to explain why markets didn't self-correct. John Maynard Keynes provided the framework.</p>
+        <p>The central questions of macro:</p>
+        <ul>
+          <li>What determines a country's output and income? (GDP)</li>
+          <li>What causes prices to rise? (Inflation)</li>
+          <li>Why are people out of work? (Unemployment)</li>
+          <li>How do economies grow over time? (Growth)</li>
+          <li>How do policy tools affect the economy? (Fiscal & Monetary Policy)</li>
+        </ul>
+        <div class="fyi-box">
+          <div class="fyi-label">💡 Three Schools of Thought</div>
+          <strong>Classical/Neoclassical</strong>: Markets self-correct; prices flexible; long-run focus; government shouldn't interfere.<br>
+          <strong>Keynesian</strong>: Markets can fail; prices sticky; short-run focus; government can stabilise through demand management.<br>
+          <strong>Monetarist</strong>: Money supply is the key driver; government spending ineffective long-run; Friedman's "k% rule."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: GDP -->
+  <div id="macro-gdp" class="panel">
+    <div class="card">
+      <div class="card-title">GDP — Gross Domestic Product <span class="badge badge-foundational">Foundational</span></div>
+      <div class="card-body">
+        <p><strong>GDP</strong> is the total monetary value of all <em>final</em> goods and services produced <em>within a country's borders</em> in a given time period (usually a year or quarter).</p>
+        <p>Key words: <em>final</em> (not intermediate), <em>within borders</em> (not by citizens), <em>monetary value</em> (current market prices).</p>
+
+        <div class="formula-box">
+          <div class="f-label">Expenditure Approach — Most Common</div>
+          GDP = C + I + G + (X − M)
+          <br><br>
+          C = Private Consumption (household spending)
+          I = Gross Investment (business investment + residential construction + inventory)
+          G = Government Expenditure (not transfer payments)
+          X = Exports
+          M = Imports
+          (X − M) = Net Exports (Trade Balance)
+        </div>
+
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 India's GDP Composition (approx.)</div>
+          C ≈ 57% | I ≈ 32% | G ≈ 11% | Net Exports ≈ −2% (India runs a trade deficit). India's GDP at current prices (FY24): ~₹295 lakh crore (~$3.5 trillion). 5th largest economy globally.
+        </div>
+
+        <div class="formula-box">
+          <div class="f-label">Other Approaches</div>
+          Income Approach:  GDP = Wages + Rent + Interest + Profit + Mixed Income
+          <br>
+          Value-Added Approach: GDP = Sum of Net Value Added across all sectors
+          <br>
+          NVA = Gross Output − Intermediate Consumption
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">National Income Aggregates <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <table>
+          <tr><th>Measure</th><th>Full Form</th><th>Formula / Difference</th></tr>
+          <tr><td><strong>GDP</strong></td><td>Gross Domestic Product</td><td>All production within borders</td></tr>
+          <tr><td><strong>GNP</strong></td><td>Gross National Product</td><td>GDP + Net Factor Income from Abroad (NFIA)</td></tr>
+          <tr><td><strong>NNP</strong></td><td>Net National Product</td><td>GNP − Depreciation (Capital Consumption)</td></tr>
+          <tr><td><strong>NNP (MP)</strong></td><td>NNP at Market Prices</td><td>= NNP at FC + Indirect Taxes − Subsidies</td></tr>
+          <tr><td><strong>National Income</strong></td><td>NI = NNP at FC</td><td>= NNP(MP) − Net Indirect Taxes</td></tr>
+          <tr><td><strong>Personal Income</strong></td><td>PI</td><td>NI − Retained earnings − Corp taxes + Transfer payments</td></tr>
+          <tr><td><strong>PDI</strong></td><td>Personal Disposable Income</td><td>PI − Personal Taxes</td></tr>
+        </table>
+
+        <div class="formula-box">
+          <div class="f-label">Key Relationships</div>
+          GNP = GDP + NFIA
+          NNP = GNP − Depreciation
+          National Income (NI) = NNP at Factor Cost
+          <br>
+          FC = Factor Cost (no taxes/subsidies included)
+          MP = Market Price (includes indirect taxes, net of subsidies)
+          NNP at MP = NNP at FC + Indirect Taxes − Subsidies
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Nominal vs Real GDP & GDP Deflator <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p><strong>Nominal GDP</strong>: Measured at <em>current prices</em>. Can rise because of more output OR higher prices.</p>
+        <p><strong>Real GDP</strong>: Measured at <em>constant base-year prices</em>. Removes inflation effect. True measure of output growth.</p>
+        <div class="formula-box">
+          <div class="f-label">GDP Deflator</div>
+          GDP Deflator = (Nominal GDP / Real GDP) × 100
+          <br><br>
+          Inflation rate ≈ % change in GDP Deflator
+          <br>
+          Real GDP = (Nominal GDP / GDP Deflator) × 100
+        </div>
+
+        <!-- GDP Calculator -->
+        <div class="calc-box" style="margin-top:16px;">
+          <div class="calc-title">🧮 GDP Deflator & Real GDP Calculator</div>
+          <div class="calc-grid">
+            <div class="input-group">
+              <label>Nominal GDP (₹ crore)</label>
+              <input class="calc-input" id="nominalGDP" type="number" placeholder="e.g. 295000000">
+            </div>
+            <div class="input-group">
+              <label>Real GDP (₹ crore, base year prices)</label>
+              <input class="calc-input" id="realGDP" type="number" placeholder="e.g. 173000000">
+            </div>
+          </div>
+          <button class="calc-btn success" onclick="calcGDPDeflator()">Calculate →</button>
+          <div class="calc-result" id="gdpResult"></div>
+        </div>
+
+        <p style="margin-top:14px;"><strong>Wealth vs Income</strong>:</p>
+        <ul>
+          <li><strong>Income</strong>: A <em>flow</em> variable — what you earn over a period. (Annual salary, quarterly GDP)</li>
+          <li><strong>Wealth</strong>: A <em>stock</em> variable — what you own at a point in time. (Net worth, national capital stock)</li>
+        </ul>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 What GDP Misses</div>
+          GDP doesn't capture: (1) <strong>Non-market goods</strong> — household work, volunteering, subsistence farming. (2) <strong>Distribution</strong> — India's GDP/capita may rise but inequality could worsen. (3) <strong>Environment</strong> — GDP rises when forests are felled and sold as timber. (4) <strong>Happiness & wellbeing</strong>. That's why HDI, GPI (Genuine Progress Indicator), and Green GDP are proposed alternatives.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Circular Flow of Income <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p>The economy is a circular flow between two sectors — <strong>households</strong> and <strong>firms</strong> — through two types of markets.</p>
+
+        <div class="diagram-wrap">
+          <div class="diagram-title">Circular Flow of Income</div>
+          <svg viewBox="0 0 420 280" xmlns="http://www.w3.org/2000/svg" style="max-width:420px;width:100%;">
+            <!-- Households box -->
+            <rect x="20" y="110" width="120" height="60" rx="8" fill="rgba(59,130,246,0.15)" stroke="#3b82f6" stroke-width="1.5"/>
+            <text x="80" y="136" fill="#60a5fa" font-size="13" font-weight="600" text-anchor="middle">Households</text>
+            <text x="80" y="155" fill="#8d9bb5" font-size="10" text-anchor="middle">(Consumers)</text>
+            <!-- Firms box -->
+            <rect x="280" y="110" width="120" height="60" rx="8" fill="rgba(16,185,129,0.15)" stroke="#10b981" stroke-width="1.5"/>
+            <text x="340" y="136" fill="#34d399" font-size="13" font-weight="600" text-anchor="middle">Firms</text>
+            <text x="340" y="155" fill="#8d9bb5" font-size="10" text-anchor="middle">(Producers)</text>
+            <!-- Product market -->
+            <rect x="155" y="20" width="110" height="45" rx="6" fill="rgba(245,158,11,0.12)" stroke="#f59e0b" stroke-width="1"/>
+            <text x="210" y="40" fill="#fbbf24" font-size="11" text-anchor="middle" font-weight="600">Product</text>
+            <text x="210" y="55" fill="#fbbf24" font-size="11" text-anchor="middle" font-weight="600">Market</text>
+            <!-- Factor market -->
+            <rect x="155" y="215" width="110" height="45" rx="6" fill="rgba(167,139,250,0.12)" stroke="#a78bfa" stroke-width="1"/>
+            <text x="210" y="235" fill="#c084fc" font-size="11" text-anchor="middle" font-weight="600">Factor</text>
+            <text x="210" y="250" fill="#c084fc" font-size="11" text-anchor="middle" font-weight="600">Market</text>
+            <!-- Arrows - goods flow (top) HH → goods mkt → firms? reversed: firms supply goods to HH via product mkt -->
+            <!-- Money flow top (HH pay for goods) -->
+            <path d="M 140 125 Q 210 65 280 125" stroke="#fbbf24" stroke-width="1.5" fill="none" marker-end="url(#arrow-gold)"/>
+            <text x="210" y="80" fill="#fbbf24" font-size="10" text-anchor="middle">spending (C)</text>
+            <!-- Goods flow top (firms deliver goods) -->
+            <path d="M 280 145 Q 210 90 140 145" stroke="#fbbf24" stroke-width="1.5" fill="none" stroke-dasharray="4,3" marker-end="url(#arrow-gold2)"/>
+            <text x="210" y="110" fill="#8d9bb5" font-size="10" text-anchor="middle">goods &amp; services</text>
+            <!-- Money flow bottom (firms pay wages/rent) -->
+            <path d="M 280 155 Q 210 210 140 155" stroke="#c084fc" stroke-width="1.5" fill="none" marker-end="url(#arrow-purple)"/>
+            <text x="210" y="200" fill="#c084fc" font-size="10" text-anchor="middle">wages, rent, profit</text>
+            <!-- Factor flow bottom (HH supply labour) -->
+            <path d="M 140 165 Q 210 225 280 165" stroke="#c084fc" stroke-width="1.5" fill="none" stroke-dasharray="4,3" marker-end="url(#arrow-purple2)"/>
+            <text x="210" y="220" fill="#8d9bb5" font-size="10" text-anchor="middle">labour, land, capital</text>
+            <!-- Arrow defs -->
+            <defs>
+              <marker id="arrow-gold" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L8,3 z" fill="#fbbf24"/>
+              </marker>
+              <marker id="arrow-gold2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L8,3 z" fill="#fbbf24"/>
+              </marker>
+              <marker id="arrow-purple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L8,3 z" fill="#c084fc"/>
+              </marker>
+              <marker id="arrow-purple2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L8,3 z" fill="#c084fc"/>
+              </marker>
+            </defs>
+          </svg>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">
+            <span style="color:#fbbf24">━━</span> Money flows &nbsp;|&nbsp; 
+            <span style="color:#fbbf24">╌╌</span> Real flows (goods/services) &nbsp;|&nbsp;
+            <span style="color:#c084fc">━━</span> Income payments
+          </div>
+        </div>
+        <p>In a closed economy: Total Output = Total Income = Total Expenditure. These three approaches to GDP always give the same result.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Inflation & Unemployment -->
+  <div id="macro-infunemp" class="panel">
+    <div class="card">
+      <div class="card-title">Measuring Inflation <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p><strong>Inflation</strong>: A sustained, general rise in the price level. Reduces the purchasing power of money. Not to be confused with a price rise in one good (that's a relative price change).</p>
+        <div class="grid-2">
+          <div class="term-card">
+            <div class="term-name">CPI — Consumer Price Index</div>
+            <div class="term-def">Measures price changes of a fixed basket of goods consumed by a typical household. India's headline inflation measure. Base year: 2012. Compiled by MOSPI.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">WPI — Wholesale Price Index</div>
+            <div class="term-def">Measures prices at the wholesale (factory-gate) level. Covers about 697 commodities. Base year: 2011-12. Often leads CPI changes. Compiled by DPIIT.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">GDP Deflator</div>
+            <div class="term-def">Broader measure — covers all goods in GDP, not just a fixed basket. Updates automatically to include new goods. Best for measuring overall price level change.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">PPI — Producer Price Index</div>
+            <div class="term-def">Measures prices received by producers. Similar to WPI. India is transitioning to PPI to align with global standards.</div>
+          </div>
+        </div>
+        <div class="formula-box">
+          <div class="f-label">CPI Calculation</div>
+          CPI = (Cost of basket in current year / Cost of basket in base year) × 100
+          <br><br>
+          Inflation Rate = ((CPI₂ − CPI₁) / CPI₁) × 100
+          <br>Or approximately: % change in CPI
+        </div>
+
+        <!-- CPI Calculator -->
+        <div class="calc-box">
+          <div class="calc-title">🧮 CPI Inflation Calculator</div>
+          <div class="calc-grid">
+            <div class="input-group">
+              <label>Basket Cost — Base Year (₹)</label>
+              <input class="calc-input" id="cpiBase" type="number" placeholder="e.g. 1000">
+            </div>
+            <div class="input-group">
+              <label>Basket Cost — Current Year (₹)</label>
+              <input class="calc-input" id="cpiCurr" type="number" placeholder="e.g. 1125">
+            </div>
+          </div>
+          <button class="calc-btn warning" onclick="calcCPI()">Calculate →</button>
+          <div class="calc-result" id="cpiResult"></div>
+        </div>
+
+        <p style="margin-top:16px;"><strong>Types of Inflation</strong>:</p>
+        <ul>
+          <li><strong>Demand-pull</strong>: Too much money chasing too few goods. "Inflation by demand." (Post-COVID India, 2021-22)</li>
+          <li><strong>Cost-push</strong>: Supply shock raises production costs → firms raise prices. (Russia-Ukraine war → wheat/oil price surge 2022)</li>
+          <li><strong>Built-in / Wage-price spiral</strong>: Workers demand higher wages → firms raise prices → workers demand higher wages...</li>
+          <li><strong>Imported inflation</strong>: Depreciation of rupee makes imports costlier → price rise (India's oil import bill)</li>
+        </ul>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 RBI's Inflation Target</div>
+          Under the Monetary Policy Framework (2016), RBI targets CPI inflation at <strong>4% ± 2%</strong> (2%–6% band). If inflation remains outside this band for 3 consecutive quarters, RBI must explain to the government. This is the Flexible Inflation Targeting (FIT) framework.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Unemployment — Types & Measurement <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <div class="formula-box">
+          <div class="f-label">Key Formulas</div>
+          Unemployment Rate = (Unemployed / Labour Force) × 100
+          Labour Force = Employed + Unemployed (actively seeking work)
+          LFPR = (Labour Force / Working Age Population) × 100
+          <br>
+          Working Age Population: typically 15–64 years
+        </div>
+
+        <table>
+          <tr><th>Type</th><th>Cause</th><th>Indian Example</th></tr>
+          <tr><td><strong>Frictional</strong></td><td>Between jobs — time spent searching for new employment. Unavoidable.</td><td>An IT engineer leaving TCS to join a startup, takes 2 months.</td></tr>
+          <tr><td><strong>Structural</strong></td><td>Skills mismatch due to technological change or structural shifts in economy.</td><td>Traditional weavers in UP displaced by power loom technology.</td></tr>
+          <tr><td><strong>Cyclical</strong></td><td>Insufficient aggregate demand during recession.</td><td>Hotel & aviation job losses during COVID lockdowns (2020-21).</td></tr>
+          <tr><td><strong>Seasonal</strong></td><td>Demand for labour varies with season.</td><td>Agricultural labour in Bihar/UP: unemployed outside Kharif/Rabi seasons.</td></tr>
+          <tr><td><strong>Disguised</strong></td><td>Marginal productivity = 0; extra workers add nothing to output. Labour appears employed but is redundant.</td><td>5 people doing a job 2 can handle on a family farm — classic Indian agriculture problem.</td></tr>
+        </table>
+
+        <p><strong>Natural Rate of Unemployment (NRU)</strong> = Frictional + Structural unemployment. The level of unemployment that exists even when the economy is at full employment. Also called NAIRU (Non-Accelerating Inflation Rate of Unemployment).</p>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 India's Unemployment Data</div>
+          India measures unemployment through the PLFS (Periodic Labour Force Survey), published quarterly by MOSPI. India's unemployment rate is around 7-8% (CMIE data). However, disguised unemployment in agriculture and informal sector underemployment make headline numbers misleading. India's female LFPR (~25%) is among the lowest in the world.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Foundations -->
+  <div id="macro-foundations" class="panel">
+    <div class="card">
+      <div class="card-title">Three Pillars of Keynesian Macro <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p>Keynes' <em>General Theory (1936)</em> built macroeconomics on three foundational relationships:</p>
+        <div class="pillar-grid">
+          <div class="pillar" style="background:rgba(59,130,246,0.07);border-color:var(--micro-border)">
+            <div class="pillar-icon">🛒</div>
+            <div class="pillar-name">Consumption (C)</div>
+            <div class="pillar-desc">C = a + b·Yd. Households consume a baseline + a fraction (MPC) of disposable income. MPC (Marginal Propensity to Consume) is key.</div>
+          </div>
+          <div class="pillar" style="background:rgba(16,185,129,0.07);border-color:var(--basics-border)">
+            <div class="pillar-icon">🔧</div>
+            <div class="pillar-name">Investment (I)</div>
+            <div class="pillar-desc">I = I₀ − b·r. Investment is negatively related to the interest rate (r). Lower rates → cheaper to borrow → more investment. Highly volatile (animal spirits).</div>
+          </div>
+          <div class="pillar" style="background:rgba(167,139,250,0.07);border-color:var(--macro-border)">
+            <div class="pillar-icon">🏛️</div>
+            <div class="pillar-name">Government (G & T)</div>
+            <div class="pillar-desc">G = autonomous government spending. T = taxes. Both shift the demand schedule. Fiscal policy works through these levers.</div>
+          </div>
+        </div>
+
+        <div class="formula-box">
+          <div class="f-label">Keynesian Consumption Function & Multiplier</div>
+          C = a + MPC · Yd    (a = autonomous consumption)
+          <br>
+          MPC + MPS = 1
+          <br><br>
+          Multiplier (k) = 1 / (1 − MPC) = 1 / MPS
+          <br>
+          ΔGDP = k × ΔG (or k × ΔI)
+          <br><br>
+          If MPC = 0.8 → k = 1/(1-0.8) = 5
+          So a ₹100 crore increase in government spending → ₹500 crore increase in GDP
+        </div>
+
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 India's Multiplier</div>
+          India's fiscal multiplier is estimated at around 1.5–2.5 in the short run (studies by IMF, RBI). PM Kisan Samman Nidhi (₹6,000/yr to farmers) works through a relatively high MPC among poor farmers — they spend most of any incremental income → stronger multiplier effect.
+        </div>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 Keynes's Famous Quote</div>
+          "In the long run, we are all dead." Keynes argued that classical economists who said "don't worry, the economy will self-correct in the long run" were being unhelpfully vague. People suffer in the short run. Government has a role to stabilise demand NOW.
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-box">
+      <div class="calc-title">🧮 Keynesian Multiplier Calculator</div>
+      <div class="calc-grid">
+        <div class="input-group">
+          <label>MPC (Marginal Propensity to Consume, 0–1)</label>
+          <input class="calc-input" id="mpc_val" type="number" placeholder="e.g. 0.8" step="0.01" min="0" max="0.99">
+        </div>
+        <div class="input-group">
+          <label>Autonomous Spending Increase (ΔG or ΔI) — ₹ crore</label>
+          <input class="calc-input" id="delta_g" type="number" placeholder="e.g. 10000">
+        </div>
+      </div>
+      <button class="calc-btn success" onclick="calcMultiplier()">Calculate →</button>
+      <div class="calc-result" id="multResult"></div>
+    </div>
+  </div>
+
+  <!-- Panel: Models -->
+  <div id="macro-models" class="panel">
+    <div class="card">
+      <div class="card-title">IS-LM Model <span class="badge badge-advanced">Advanced</span></div>
+      <div class="card-body">
+        <p>The IS-LM model shows simultaneous equilibrium in <strong>two markets</strong>: the goods market (IS) and the money market (LM). Developed by Hicks (1937) interpreting Keynes.</p>
+
+        <div class="grid-2">
+          <div>
+            <p><strong>IS Curve (Investment = Saving)</strong>: Shows all combinations of output (Y) and interest rate (r) where the goods market is in equilibrium.</p>
+            <ul>
+              <li>Slopes <em>downward</em> in Y-r space</li>
+              <li>Higher r → less investment (I) → lower output (Y)</li>
+              <li>Shifts right: ↑G, ↑I, ↑C, ↓T, ↑exports</li>
+              <li>Shifts left: ↓G, ↑T, ↓investment</li>
+            </ul>
+          </div>
+          <div>
+            <p><strong>LM Curve (Liquidity Preference = Money Supply)</strong>: Shows all Y-r combinations where money market is in equilibrium.</p>
+            <ul>
+              <li>Slopes <em>upward</em> in Y-r space</li>
+              <li>Higher Y → more money demand (transactions) → higher r to equilibrate</li>
+              <li>Shifts right: ↑ money supply (RBI OMOs, lower CRR)</li>
+              <li>Shifts left: ↓ money supply</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="diagram-wrap">
+          <div class="diagram-title">IS-LM Model — Joint Equilibrium</div>
+          <svg viewBox="0 0 420 300" xmlns="http://www.w3.org/2000/svg" style="max-width:420px;width:100%;">
+            <line x1="50" y1="265" x2="390" y2="265" stroke="#4e5d75" stroke-width="1.5"/>
+            <line x1="50" y1="265" x2="50" y2="20" stroke="#4e5d75" stroke-width="1.5"/>
+            <polygon points="390,261 398,265 390,269" fill="#4e5d75"/>
+            <polygon points="46,20 50,12 54,20" fill="#4e5d75"/>
+            <text x="400" y="269" fill="#8d9bb5" font-size="12">Y</text>
+            <text x="38" y="16" fill="#8d9bb5" font-size="12">r</text>
+            <!-- IS curve (downward) -->
+            <path d="M 80 60 Q 200 160 370 240" stroke="#3b82f6" stroke-width="2.5" fill="none"/>
+            <!-- LM curve (upward) -->
+            <path d="M 80 220 Q 200 160 370 80" stroke="#a78bfa" stroke-width="2.5" fill="none"/>
+            <!-- IS' shifted right -->
+            <path d="M 120 60 Q 245 160 390 240" stroke="#3b82f6" stroke-width="1.5" fill="none" stroke-dasharray="5,4" opacity="0.5"/>
+            <!-- Equilibrium -->
+            <circle cx="225" cy="159" r="5" fill="#fbbf24"/>
+            <line x1="50" y1="159" x2="225" y2="159" stroke="#fbbf24" stroke-width="1" stroke-dasharray="4,4"/>
+            <line x1="225" y1="159" x2="225" y2="265" stroke="#fbbf24" stroke-width="1" stroke-dasharray="4,4"/>
+            <!-- Labels -->
+            <text x="378" y="245" fill="#3b82f6" font-size="13" font-weight="600">IS</text>
+            <text x="378" y="82" fill="#a78bfa" font-size="13" font-weight="600">LM</text>
+            <text x="390" y="242" fill="#3b82f6" font-size="10" opacity="0.7">IS'</text>
+            <text x="32" y="163" fill="#fbbf24" font-size="11">r*</text>
+            <text x="218" y="282" fill="#fbbf24" font-size="11">Y*</text>
+            <text x="235" y="155" fill="#fbbf24" font-size="11">E</text>
+          </svg>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">
+            <span style="color:#3b82f6">■</span> IS: Goods market &nbsp;|&nbsp;
+            <span style="color:#a78bfa">■</span> LM: Money market &nbsp;|&nbsp;
+            <span style="color:#fbbf24">●</span> Equilibrium (Y*, r*)
+          </div>
+        </div>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 IS-LM in Practice</div>
+          When RBI cuts repo rate (↓r) → LM shifts right → equilibrium Y rises. When government increases spending (↑G) → IS shifts right → both Y and r rise. The rise in r may "crowd out" some private investment — the crowding out effect.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">AD-AS Model (Aggregate Demand – Aggregate Supply) <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p>The AD-AS model operates at the macroeconomic level — showing the overall price level (P) vs aggregate output (Y).</p>
+        <div class="grid-2">
+          <div>
+            <p><strong>AD (Aggregate Demand)</strong>: Total demand in the economy = C + I + G + NX. Slopes downward because:</p>
+            <ul>
+              <li><em>Real balance effect</em>: Higher P reduces real wealth → lower C</li>
+              <li><em>Interest rate effect</em>: Higher P → higher money demand → higher r → lower I</li>
+              <li><em>Exchange rate effect</em>: Higher P → currency appreciates → exports fall</li>
+            </ul>
+          </div>
+          <div>
+            <p><strong>AS (Aggregate Supply)</strong>:</p>
+            <ul>
+              <li><em>SRAS</em>: Upward sloping. Higher prices → firms supply more (wages sticky in short run)</li>
+              <li><em>LRAS</em>: Vertical at potential output Y*. In the long run, all prices adjust; output determined by factors, not prices.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="diagram-wrap">
+          <div class="diagram-title">AD-AS with SRAS & LRAS</div>
+          <svg viewBox="0 0 420 280" xmlns="http://www.w3.org/2000/svg" style="max-width:420px;width:100%;">
+            <line x1="50" y1="250" x2="390" y2="250" stroke="#4e5d75" stroke-width="1.5"/>
+            <line x1="50" y1="250" x2="50" y2="20" stroke="#4e5d75" stroke-width="1.5"/>
+            <polygon points="390,246 398,250 390,254" fill="#4e5d75"/>
+            <polygon points="46,20 50,12 54,20" fill="#4e5d75"/>
+            <text x="400" y="254" fill="#8d9bb5" font-size="12">Y</text>
+            <text x="38" y="16" fill="#8d9bb5" font-size="12">P</text>
+            <!-- AD -->
+            <line x1="90" y1="50" x2="370" y2="230" stroke="#f87171" stroke-width="2.5"/>
+            <!-- SRAS -->
+            <line x1="80" y1="230" x2="360" y2="60" stroke="#34d399" stroke-width="2.5"/>
+            <!-- LRAS (vertical) -->
+            <line x1="240" y1="20" x2="240" y2="250" stroke="#fbbf24" stroke-width="2" stroke-dasharray="6,4"/>
+            <!-- Equilibrium -->
+            <circle cx="225" cy="140" r="5" fill="white"/>
+            <line x1="50" y1="140" x2="225" y2="140" stroke="rgba(255,255,255,0.3)" stroke-width="1" stroke-dasharray="4,4"/>
+            <line x1="225" y1="140" x2="225" y2="250" stroke="rgba(255,255,255,0.3)" stroke-width="1" stroke-dasharray="4,4"/>
+            <!-- Labels -->
+            <text x="375" y="236" fill="#f87171" font-size="13" font-weight="600">AD</text>
+            <text x="370" y="58" fill="#34d399" font-size="13" font-weight="600">SRAS</text>
+            <text x="248" y="35" fill="#fbbf24" font-size="12">LRAS</text>
+            <text x="30" y="144" fill="#aaa" font-size="11">P*</text>
+            <text x="218" y="267" fill="#aaa" font-size="11">Y*</text>
+          </svg>
+        </div>
+
+        <p><strong>Stagflation</strong>: When SRAS shifts left (supply shock like oil crisis) → higher P AND lower Y simultaneously. The 1970s oil shock — India and globally. Hard to treat with conventional policy (fixing inflation means contractionary policy that worsens unemployment further).</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Phillips Curve <span class="badge badge-advanced">Advanced</span></div>
+      <div class="card-body">
+        <p>The Phillips Curve shows the empirical relationship between <em>inflation and unemployment</em> — discovered by A.W. Phillips (1958) studying UK data 1861–1957.</p>
+        <p><strong>Short-run Phillips Curve</strong>: Inverse relationship — lower unemployment → higher inflation (demand is hot). Higher unemployment → lower inflation.</p>
+        <p><strong>Long-run Phillips Curve (Friedman-Phelps, 1968)</strong>: Vertical at the Natural Rate of Unemployment (NRU). In the long run, there's no trade-off. Attempts to sustain unemployment below NRU will only cause accelerating inflation.</p>
+        <p><strong>Stagflation Exception</strong>: In the 1970s, both inflation AND unemployment rose together (OPEC oil shock shifted SRAS left), breaking the short-run relationship. The Phillips Curve can shift outward.</p>
+
+        <div class="diagram-wrap">
+          <div class="diagram-title">Phillips Curve — Short Run & Long Run</div>
+          <svg viewBox="0 0 380 260" xmlns="http://www.w3.org/2000/svg" style="max-width:380px;width:100%;">
+            <line x1="50" y1="230" x2="350" y2="230" stroke="#4e5d75" stroke-width="1.5"/>
+            <line x1="50" y1="230" x2="50" y2="20" stroke="#4e5d75" stroke-width="1.5"/>
+            <polygon points="350,226 358,230 350,234" fill="#4e5d75"/>
+            <polygon points="46,20 50,12 54,20" fill="#4e5d75"/>
+            <text x="360" y="234" fill="#8d9bb5" font-size="12">U%</text>
+            <text x="30" y="16" fill="#8d9bb5" font-size="12">π%</text>
+            <!-- SRPC -->
+            <path d="M 80 50 Q 180 120 340 200" stroke="#a78bfa" stroke-width="2.5" fill="none"/>
+            <!-- SRPC2 (shifted) -->
+            <path d="M 80 80 Q 180 155 340 230" stroke="#a78bfa" stroke-width="1.5" fill="none" stroke-dasharray="5,4" opacity="0.5"/>
+            <!-- LRPC vertical -->
+            <line x1="220" y1="20" x2="220" y2="230" stroke="#fbbf24" stroke-width="2" stroke-dasharray="6,4"/>
+            <!-- Labels -->
+            <text x="348" y="196" fill="#a78bfa" font-size="12">SRPC₁</text>
+            <text x="348" y="230" fill="#a78bfa" font-size="11" opacity="0.7">SRPC₂</text>
+            <text x="226" y="35" fill="#fbbf24" font-size="12">LRPC</text>
+            <text x="210" y="248" fill="#fbbf24" font-size="11">NRU</text>
+            <text x="60" y="46" fill="#f87171" font-size="10">High π</text>
+            <text x="280" y="220" fill="#34d399" font-size="10">Low π</text>
+          </svg>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">
+            <span style="color:#a78bfa">■</span> Short-run trade-off &nbsp;|&nbsp;
+            <span style="color:#fbbf24">■</span> Long-run vertical at NRU
+          </div>
+        </div>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 India's Phillips Curve</div>
+          India's inflation-unemployment relationship is complicated by disguised unemployment and informal sector dominance. When headline CPI is controlled, formal unemployment may not move much. The RBI's MPC (Monetary Policy Committee) focuses more on the CPI target than on a rigid unemployment target.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Time Horizons -->
+  <div id="macro-time" class="panel">
+    <div class="card">
+      <div class="card-title">Short Run, Medium Run & Long Run in Macro <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <table>
+          <tr><th>Horizon</th><th>Price flexibility</th><th>Key model</th><th>What drives output</th></tr>
+          <tr>
+            <td><strong>Short Run</strong> (months to ~2 yrs)</td>
+            <td>Prices and wages are <em>sticky</em> (don't adjust quickly)</td>
+            <td>IS-LM, Keynesian</td>
+            <td>Aggregate Demand (AD). Output below potential if AD weak.</td>
+          </tr>
+          <tr>
+            <td><strong>Medium Run</strong> (~2-5 yrs)</td>
+            <td>Prices begin to adjust; labour market partially flexible</td>
+            <td>AD-AS with adjusting SRAS; Phillips Curve</td>
+            <td>Mix of demand and supply-side factors; economy moves toward equilibrium</td>
+          </tr>
+          <tr>
+            <td><strong>Long Run</strong> (5+ yrs)</td>
+            <td>All prices fully flexible; wages adjust to clear labour market</td>
+            <td>LRAS vertical; Solow Growth Model</td>
+            <td>Supply-side: Labour force, capital, technology (TFP). AD only affects prices.</td>
+          </tr>
+        </table>
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 India's COVID Recovery</div>
+          <strong>Short run (FY21)</strong>: GDP fell 6.6% — demand collapse, sticky wages couldn't adjust fast enough. <strong>Medium run (FY22-23)</strong>: Recovery as prices adjusted, demand returned, firms rehired. <strong>Long run</strong>: Depends on structural reforms — PLI schemes, infrastructure, education — to raise India's potential output (Y*).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Fiscal Policy -->
+  <div id="macro-policy" class="panel">
+    <div class="card">
+      <div class="card-title">Fiscal Policy in the IS-LM Framework <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p><strong>Fiscal Policy</strong>: Government decisions on <em>spending (G)</em> and <em>taxation (T)</em> to influence aggregate demand and output.</p>
+        <div class="grid-2">
+          <div class="pillar" style="background:rgba(16,185,129,0.07);border-color:var(--basics-border)">
+            <div class="pillar-name">Expansionary Fiscal Policy</div>
+            <div class="pillar-desc">↑G or ↓T → AD rises → IS shifts right → higher Y and r. Used in recessions. Example: India's ₹20 lakh crore COVID stimulus (2020).</div>
+          </div>
+          <div class="pillar" style="background:rgba(248,113,113,0.07);border-color:rgba(248,113,113,0.3)">
+            <div class="pillar-name">Contractionary Fiscal Policy</div>
+            <div class="pillar-desc">↓G or ↑T → AD falls → IS shifts left → lower Y and r. Used when inflation is high. India's fiscal consolidation path (FRBM Act targets).</div>
+          </div>
+        </div>
+
+        <p><strong>Crowding Out Effect</strong>: When G rises, government needs to borrow → bond supply rises → interest rates rise → private investment (I) falls. IS shifts right, but the r rise partially offsets the output gain.</p>
+        <div class="formula-box">
+          <div class="f-label">Fiscal Deficit & Debt</div>
+          Fiscal Deficit = G − T  (when G > T)
+          Primary Deficit = Fiscal Deficit − Interest Payments
+          Revenue Deficit = Revenue Expenditure − Revenue Receipts
+          <br><br>
+          India's FY24 Fiscal Deficit Target: 5.1% of GDP
+          India's Fiscal Deficit (FY23): 5.9% of GDP
+        </div>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 FRBM Act (Fiscal Responsibility & Budget Management Act, 2003)</div>
+          Mandates the Indian government to reduce fiscal deficit to 3% of GDP (currently relaxed). Provides a rule-based framework to prevent unsustainable deficits. The "escape clause" (invoked during COVID) allows breaching the target during exceptional circumstances.
+        </div>
+
+        <p><strong>Automatic Stabilisers</strong>: Built-in fiscal mechanisms that stabilise the economy without deliberate policy action:</p>
+        <ul>
+          <li>Progressive income tax: when incomes fall in recession, tax burden falls automatically → cushions the blow</li>
+          <li>Unemployment benefits: when unemployment rises, transfers rise automatically → sustains consumption</li>
+          <li>In India: MGNREGS acts as a partial automatic stabiliser in rural areas</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Open Economy -->
+  <div id="macro-openeco" class="panel">
+    <div class="card">
+      <div class="card-title">Open Economy Fundamentals <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p>An <strong>open economy</strong> trades goods, services, and assets with the rest of the world. India is an increasingly open economy (trade to GDP ratio ≈ 45%).</p>
+
+        <div class="formula-box">
+          <div class="f-label">Balance of Payments (BoP)</div>
+          BoP = Current Account + Capital Account + Financial Account + Errors & Omissions
+          <br><br>
+          Current Account (CA) = Trade Balance (X − M) + Net Services + Net Primary Income (remittances, profits) + Net Secondary Income (transfers)
+          <br><br>
+          India's CA Deficit (FY23): ~2.0% of GDP (goods deficit offset by services surplus + remittances)
+          India is world's #1 remittance recipient (~$125 bn in 2023)
+        </div>
+
+        <div class="grid-2">
+          <div class="term-card">
+            <div class="term-name">Nominal Exchange Rate</div>
+            <div class="term-def">Price of one currency in terms of another. E.g., 1 USD = ₹83.5 (April 2024). Determined by demand-supply in the forex market.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Real Exchange Rate</div>
+            <div class="term-def">Nominal rate adjusted for price levels. RER = e × (P* / P). Measures relative purchasing power — true competitiveness of exports.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Appreciation</div>
+            <div class="term-def">Rupee buys more foreign currency (₹80 → ₹75 per USD). Good for importers (cheaper imports). Bad for exporters (their goods costlier abroad).</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Depreciation</div>
+            <div class="term-def">Rupee buys less foreign currency (₹80 → ₹85 per USD). Good for exporters. Bad for importers and those with dollar debt.</div>
+          </div>
+        </div>
+
+        <div class="formula-box">
+          <div class="f-label">Marshall-Lerner Condition</div>
+          Currency devaluation improves trade balance (reduces deficit) only if:
+          |PED_exports| + |PED_imports| > 1
+          <br><br>
+          In the short run, condition often NOT met → J-Curve effect:
+          After devaluation, trade balance worsens initially (contracts already in place),
+          then improves as quantities adjust.
+        </div>
+
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 India's J-Curve Experience</div>
+          When the rupee depreciated sharply in 2013 (to ₹68/USD), India's import bill (especially oil, gold) spiked in rupee terms. Export response took ~6 months. Eventually, IT exports and textiles became more competitive. RBI intervened using forex reserves to prevent overshooting.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END MACRO -->
+
+<!-- ===================== SECTION 4: INTERNATIONAL TRADE & WTO ===================== -->
+<div id="section-trade" class="section-panel">
+  <div class="section-header trade">
+    <div class="section-emoji">🌐</div>
+    <div>
+      <div class="section-title">International Trade & WTO 2026</div>
+      <div class="section-desc">Why countries trade, global trade agreements, intellectual property, agriculture, and the 2026 context.</div>
+      <div class="section-tags">
+        <span class="badge badge-core">Core</span>
+        <span class="badge badge-advanced">Advanced</span>
+        <span style="font-size:13px;color:var(--text-muted);">6 topics · ~2 hrs</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-nav">
+    <button class="sub-tab active" data-parent="trade" onclick="switchPanel('trade','ttheory')" data-panel="ttheory">Trade Theories</button>
+    <button class="sub-tab" data-parent="trade" onclick="switchPanel('trade','wto')" data-panel="wto">WTO 2026</button>
+    <button class="sub-tab" data-parent="trade" onclick="switchPanel('trade','gatt')" data-panel="gatt">GATT</button>
+    <button class="sub-tab" data-parent="trade" onclick="switchPanel('trade','trips')" data-panel="trips">TRIPs</button>
+    <button class="sub-tab" data-parent="trade" onclick="switchPanel('trade','agri')" data-panel="agri">Agreement on Agriculture</button>
+    <button class="sub-tab" data-parent="trade" onclick="switchPanel('trade','env')" data-panel="env">Trade & Environment</button>
+  </div>
+
+  <!-- Panel: Trade Theories -->
+  <div id="trade-ttheory" class="panel active">
+    <div class="card">
+      <div class="card-title">Absolute Advantage — Adam Smith (1776) <span class="badge badge-foundational">Foundational</span></div>
+      <div class="card-body">
+        <p>A country has an <strong>absolute advantage</strong> in producing a good if it can produce it using fewer resources (more efficiently) than another country.</p>
+        <div class="example-box">
+          <div class="ex-label">Simple Example</div>
+          <table>
+            <tr><th></th><th>Cloth (hrs/unit)</th><th>Wine (hrs/unit)</th></tr>
+            <tr><td><strong>India</strong></td><td>4</td><td>8</td></tr>
+            <tr><td><strong>Portugal</strong></td><td>6</td><td>3</td></tr>
+          </table>
+          India has absolute advantage in Cloth (4 < 6). Portugal has absolute advantage in Wine (3 < 8). Smith's prescription: each country specialises in what it's absolutely better at, and trades.
+        </div>
+        <p>Limitation: What if one country is absolutely better at <em>everything</em>? Should it still trade?</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Comparative Advantage — David Ricardo (1817) <span class="badge badge-foundational">Foundational</span></div>
+      <div class="card-body">
+        <p><strong>Comparative advantage</strong>: A country should produce and export goods in which its <em>opportunity cost</em> is lowest — even if it has an absolute disadvantage in all goods. This is one of the most powerful insights in economics.</p>
+
+        <div class="formula-box">
+          <div class="f-label">Opportunity Cost Approach</div>
+          Comparative advantage lies where: Opportunity Cost is LOWEST
+          <br><br>
+          OC of X in country A = Units of Y foregone per unit of X produced
+          Compare across countries → produce where OC is lower
+        </div>
+
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 India-US Example</div>
+          <table>
+            <tr><th></th><th>Software (worker-days)</th><th>Wheat (worker-days)</th></tr>
+            <tr><td><strong>India</strong></td><td>2</td><td>4</td></tr>
+            <tr><td><strong>USA</strong></td><td>1</td><td>1</td></tr>
+          </table>
+          USA is absolutely better at both. But: OC of Software in India = 4/2 = 2 units of wheat. OC of Software in USA = 1/1 = 1 unit of wheat. USA has lower OC in software. India's OC of Wheat = 2/4 = 0.5 units of software. USA's OC of Wheat = 1. <strong>India has comparative advantage in wheat; USA in software.</strong> Both gain from trade even though USA is absolutely better at both.
+        </div>
+
+        <!-- Comparative Advantage Calculator -->
+        <div class="calc-box">
+          <div class="calc-title">🧮 Comparative Advantage Calculator</div>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">Enter worker-days (or hours) needed to produce 1 unit of each good in each country</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;">
+            <div></div>
+            <div class="input-group"><label>Good A (e.g. Cloth)</label><input class="calc-input" id="ca_a1" type="number" placeholder="Country 1"></div>
+            <div class="input-group"><label>Good B (e.g. Wine)</label><input class="calc-input" id="ca_b1" type="number" placeholder="Country 1"></div>
+            <div class="input-group"><label>Country 1 name</label><input class="calc-input" id="ca_c1" type="text" placeholder="e.g. India"></div>
+            <div class="input-group"><label>Good A</label><input class="calc-input" id="ca_a2" type="number" placeholder="Country 2"></div>
+            <div class="input-group"><label>Good B</label><input class="calc-input" id="ca_b2" type="number" placeholder="Country 2"></div>
+            <div class="input-group"><label>Country 2 name</label><input class="calc-input" id="ca_c2" type="text" placeholder="e.g. USA"></div>
+          </div>
+          <button class="calc-btn warning" onclick="calcComparative()">Find Comparative Advantage →</button>
+          <div class="calc-result" id="caResult"></div>
+        </div>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 Gains from Trade</div>
+          Comparative advantage shows that trade expands total global production and consumption possibilities. Both countries can consume beyond their Production Possibility Frontier (PPF). Ricardo's insight holds even when countries differ in size, technology, or wage levels — as long as relative costs differ.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Heckscher-Ohlin (H-O) Theory & Extensions <span class="badge badge-advanced">Advanced</span></div>
+      <div class="card-body">
+        <p><strong>H-O Theorem (1919–33)</strong>: Countries export goods that intensively use their <em>abundant factor</em> and import goods that intensively use their <em>scarce factor</em>.</p>
+        <ul>
+          <li>Labour-abundant country (India) → exports labour-intensive goods (textiles, leather, software services)</li>
+          <li>Capital-abundant country (USA/Germany) → exports capital-intensive goods (machinery, aircraft, pharmaceuticals)</li>
+        </ul>
+
+        <p><strong>Leontief Paradox (1953)</strong>: Wassily Leontief found that USA (capital-abundant) actually exported labour-intensive goods. Challenged H-O theory. Explanations: human capital (skilled labour is "capital"), technology gaps, natural resources.</p>
+
+        <p><strong>Terms of Trade (ToT)</strong>: Ratio of a country's export price index to import price index.</p>
+        <div class="formula-box">
+          <div class="f-label">Terms of Trade</div>
+          ToT = (Export Price Index / Import Price Index) × 100
+          <br><br>
+          ToT > 100 or improving: same exports buy more imports (favourable)
+          ToT < 100 or deteriorating: need more exports to buy same imports (unfavourable)
+          <br><br>
+          India's ToT often hurt by oil price spikes (major oil importer)
+        </div>
+
+        <div class="calc-box">
+          <div class="calc-title">🧮 Terms of Trade Calculator</div>
+          <div class="calc-grid">
+            <div class="input-group"><label>Export Price Index (current year)</label><input class="calc-input" id="epi_curr" type="number" placeholder="e.g. 135"></div>
+            <div class="input-group"><label>Import Price Index (current year)</label><input class="calc-input" id="ipi_curr" type="number" placeholder="e.g. 120"></div>
+            <div class="input-group"><label>Export Price Index (base year, optional)</label><input class="calc-input" id="epi_base" type="number" placeholder="e.g. 110"></div>
+            <div class="input-group"><label>Import Price Index (base year, optional)</label><input class="calc-input" id="ipi_base" type="number" placeholder="e.g. 100"></div>
+          </div>
+          <button class="calc-btn warning" onclick="calcToT()">Calculate →</button>
+          <div class="calc-result" id="totResult"></div>
+        </div>
+
+        <div class="deep-box">
+          <div class="deep-label">🔮 Deep-dive — New Trade Theory (Krugman, 1979)</div>
+          Krugman showed trade can arise even between identical countries due to: (1) <strong>Economies of scale</strong> — specialisation allows larger production → lower costs. (2) <strong>Product differentiation</strong> — consumers love variety (German vs Japanese cars). India-EU trade in similar goods (intra-industry trade) fits this better than H-O.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: WTO -->
+  <div id="trade-wto" class="panel">
+    <div class="card">
+      <div class="card-title">WTO — World Trade Organization (2026 Context) <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p>The <strong>WTO</strong> is the international body that regulates global trade rules. Established in <strong>January 1995</strong>, replacing GATT. Headquartered in Geneva. As of 2026, 166 member countries including India (founding member).</p>
+
+        <div class="term-grid">
+          <div class="term-card">
+            <div class="term-name">Most Favoured Nation (MFN)</div>
+            <div class="term-def">If you give one WTO member a trade concession (lower tariff), you must give it to <em>all</em> members equally. Core non-discrimination principle. Exceptions: FTAs/RTAs, preferential treatment for developing countries (GSP).</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">National Treatment</div>
+            <div class="term-def">Once goods enter a country, they must be treated no less favourably than domestically produced goods. Prevents hidden protectionism through internal taxes/regulations.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Dispute Settlement Body (DSB)</div>
+            <div class="term-def">WTO's judicial arm. Countries file complaints → panels adjudicate → Appellate Body rules (though US blocked new Appellate Body appointments 2019 onwards, causing a crisis). India has been a frequent user of DSB.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Doha Development Agenda</div>
+            <div class="term-def">Launch in 2001 — promised to address developing country concerns, especially agriculture subsidies. Largely stalled. 2026: mini-packages agreed but comprehensive deal elusive.</div>
+          </div>
+        </div>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 WTO 2026 — Key Issues</div>
+          1. <strong>Appellate Body crisis</strong>: USA's continued block on appointments — interim Multi-party Interim Appeal Arrangement (MPIA) as workaround.<br>
+          2. <strong>E-commerce negotiations</strong>: Moratorium on customs duties on digital transmissions (India & South Africa opposed it, but it held through MC13 in 2024).<br>
+          3. <strong>Fisheries subsidies</strong>: First major agreement in MC12 (2022) — disciplines on subsidies contributing to overfishing. India got special provisions for small-scale fishers.<br>
+          4. <strong>Investment facilitation</strong>: New plurilateral deal on investment facilitation for development, though India not a participant.<br>
+          5. <strong>TRIPS waiver</strong>: COVID vaccine waiver agreed partially (2022), implementation ongoing.
+        </div>
+
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 India at WTO — Key Positions</div>
+          India consistently defends: (1) Right to food security — Public Distribution System and MSP. (2) Special and Differential Treatment (S&DT) for developing countries. (3) Right to use TRIPS flexibilities for public health. India has blocked or modified several WTO deals to protect domestic interests, earning a reputation as a tough negotiator.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: GATT -->
+  <div id="trade-gatt" class="panel">
+    <div class="card">
+      <div class="card-title">GATT — General Agreement on Tariffs and Trade <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p><strong>GATT</strong> was signed in 1947 to reduce barriers to international trade. It became the de facto framework for global trade rules until the WTO replaced it in 1995. India was a founding member.</p>
+
+        <table>
+          <tr><th>Round</th><th>Year</th><th>Focus</th><th>Outcome</th></tr>
+          <tr><td>Geneva</td><td>1947</td><td>Initial tariff reductions</td><td>45,000 tariff concessions</td></tr>
+          <tr><td>Kennedy</td><td>1964-67</td><td>Tariff cuts, anti-dumping</td><td>Average tariff cut 35%</td></tr>
+          <tr><td>Tokyo</td><td>1973-79</td><td>Non-tariff barriers</td><td>Codes on subsidies, procurement</td></tr>
+          <tr><td><strong>Uruguay</strong></td><td>1986-94</td><td>Agriculture, services, IP</td><td><strong>Created WTO; TRIPS; GATS; AoA</strong></td></tr>
+        </table>
+
+        <p><strong>Key GATT Principles</strong>:</p>
+        <ul>
+          <li><strong>MFN</strong>: Equal treatment to all members (GATT Art. I)</li>
+          <li><strong>National Treatment</strong>: No discrimination once goods enter (GATT Art. III)</li>
+          <li><strong>Tariffs only</strong>: Tariffs preferred over quotas/quantitative restrictions (QRs)</li>
+          <li><strong>Transparency</strong>: Publish trade laws and regulations</li>
+          <li><strong>Reciprocity</strong>: Trade concessions negotiated on "something for something" basis</li>
+        </ul>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 Article XX — General Exceptions</div>
+          GATT Article XX allows countries to deviate from trade rules for: (a) public morals, (b) human, animal, plant health, (g) conservation of exhaustible natural resources. India has used Art. XX defences in disputes. But must not be "arbitrary discrimination or disguised restriction on trade."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: TRIPs -->
+  <div id="trade-trips" class="panel">
+    <div class="card">
+      <div class="card-title">TRIPs — Trade-Related Intellectual Property Rights <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p>TRIPs (1994/1995) is the most comprehensive multilateral agreement on intellectual property (IP). It set minimum standards all WTO members must provide.</p>
+
+        <table>
+          <tr><th>IP Type</th><th>TRIPs Requirement</th><th>Indian Law</th></tr>
+          <tr><td>Patents</td><td>Minimum 20-year protection; available for products and processes in all fields</td><td>Patents Act 1970 (amended 2005)</td></tr>
+          <tr><td>Copyrights</td><td>60 years protection for most works</td><td>Copyright Act 1957</td></tr>
+          <tr><td>Trademarks</td><td>7-year terms, renewable</td><td>Trade Marks Act 1999</td></tr>
+          <tr><td>Geographical Indications (GI)</td><td>Protection for products linked to geographic origin</td><td>GI of Goods Act 1999 (e.g., Darjeeling Tea, Basmati, Kancheepuram Silk)</td></tr>
+        </table>
+
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 India's Section 3(d) — Novartis Case</div>
+          TRIPs allows countries to define what constitutes a patentable invention. India's Patents Act Section 3(d) prevents the granting of patents for new forms of known substances (like salts, polymorphs) unless they show significantly enhanced efficacy — specifically to prevent "evergreening" (pharma companies filing trivial modifications to extend patent life).
+          <br><br>
+          In the landmark <strong>Novartis vs Union of India (2013)</strong>, the Supreme Court upheld Section 3(d), rejecting Novartis' patent for Gleevec (imatinib mesylate, a cancer drug). This protected India's ability to supply affordable generic cancer medicines globally.
+        </div>
+
+        <div class="card-body">
+          <p><strong>Compulsory Licensing (CL)</strong>: TRIPS Article 31 allows governments to issue a CL — allowing a third party to produce a patented product without the patent holder's consent, under specific circumstances (national emergency, non-commercial use).</p>
+          <p>India issued its first CL in 2012 for Nexavar (sorafenib tosylate, liver cancer drug) by Natco Pharma against Bayer — reducing price from ₹2.8 lakh/month to ₹8,880/month.</p>
+        </div>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 Doha Declaration on TRIPS & Public Health (2001)</div>
+          Affirmed that TRIPS should not prevent countries from protecting public health. Allowed least-developed countries (LDCs) to delay pharmaceutical patent compliance. Enabled countries to use compulsory licensing for HIV/AIDS, malaria, TB medicines. A landmark victory for developing countries.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Agriculture -->
+  <div id="trade-agri" class="panel">
+    <div class="card">
+      <div class="card-title">Agreement on Agriculture (AoA) <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p>The <strong>AoA</strong> (1994, part of Uruguay Round) was the first multilateral agreement to discipline agricultural trade. Three pillars:</p>
+
+        <div class="pillar-grid">
+          <div class="pillar" style="background:rgba(16,185,129,0.07);border-color:var(--basics-border)">
+            <div class="pillar-icon">📦</div>
+            <div class="pillar-name">Market Access</div>
+            <div class="pillar-desc">Convert non-tariff barriers (quotas) to tariffs ("tariffication"), then reduce tariffs. Developed countries: cut 36% over 6 years. Developing (India): cut 24% over 10 years.</div>
+          </div>
+          <div class="pillar" style="background:rgba(59,130,246,0.07);border-color:var(--micro-border)">
+            <div class="pillar-icon">💰</div>
+            <div class="pillar-name">Domestic Support</div>
+            <div class="pillar-desc">Limit trade-distorting support (AMS — Aggregate Measurement of Support). Three "boxes": Amber (reduce), Blue (constrained), Green (exempt — deemed non-trade distorting).</div>
+          </div>
+          <div class="pillar" style="background:rgba(245,158,11,0.07);border-color:var(--trade-border)">
+            <div class="pillar-icon">🚢</div>
+            <div class="pillar-name">Export Subsidies</div>
+            <div class="pillar-desc">Reduce and eventually eliminate export subsidies (most harmful trade distortion). Developed countries faced deeper cuts. Export subsidies formally prohibited after Nairobi MC (2015).</div>
+          </div>
+        </div>
+
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 India's Agriculture Concerns</div>
+          <strong>Public Stockholding for Food Security (PSH)</strong>: India's FCI procures food grains at MSP and holds public stocks. Under AoA, subsidies measured against 1986-88 reference prices — highly outdated, making India's food subsidies appear far larger than they actually are.
+          <br><br>
+          India (with G-33 coalition) has consistently sought a <strong>permanent solution</strong> for PSH. Currently protected by a "peace clause" (Bali 2013) — no dispute can be raised even if India breaches limits — but a permanent fix remains elusive. MC13 (2024) provided no resolution.
+        </div>
+
+        <div class="formula-box">
+          <div class="f-label">Subsidy Boxes (AoA)</div>
+          Amber Box: Directly linked to output/price → trade-distorting → REDUCE (AMS limit)
+          Blue Box:  Linked to production limits → partially distorting → allowed with conditions
+          Green Box: Not linked to output/price → non/minimally distorting → EXEMPT
+          <br><br>
+          Green Box includes: R&D, food security stockholding, disaster relief, decoupled payments, environmental programmes
+          <br>
+          India argument: MSP/PDS is Green Box (food security); WTO members dispute this
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Environment -->
+  <div id="trade-env" class="panel">
+    <div class="card">
+      <div class="card-title">Trade & Environment <span class="badge badge-advanced">Advanced</span></div>
+      <div class="card-body">
+        <p>The relationship between international trade and environmental sustainability is increasingly central to global trade governance.</p>
+
+        <div class="accord-item">
+          <div class="accord-head" onclick="toggleAccord(this)">
+            Carbon Border Adjustment Mechanism (CBAM) — EU, 2026
+            <span class="accord-arrow">▼</span>
+          </div>
+          <div class="accord-body">
+            <p>The EU's CBAM prices the carbon content of imports from non-EU countries. Sectors: steel, cement, aluminium, fertilisers, electricity, hydrogen. Full implementation from <strong>January 2026</strong>. Importers must buy CBAM certificates matching the carbon price of EU ETS.</p>
+            <p><strong>Impact on India</strong>: India exports ~₹14,000 crore worth of goods in CBAM-covered sectors to EU annually. Indian steel, aluminium exporters face additional compliance costs. India has raised concerns at WTO (Art. XX justification vs trade barrier debate).</p>
+            <p>India's response: Developing own carbon pricing mechanism; Green Steel framework; green hydrogen mission.</p>
+          </div>
+        </div>
+
+        <div class="accord-item">
+          <div class="accord-head" onclick="toggleAccord(this)">
+            WTO & Environmental Exceptions (GATT Article XX)
+            <span class="accord-arrow">▼</span>
+          </div>
+          <div class="accord-body">
+            <p>Countries can restrict trade to protect the environment under Art. XX(b) (human/animal/plant health) and XX(g) (conservation of exhaustible natural resources). But such measures must not be "arbitrary discrimination or disguised restriction."</p>
+            <p>Key WTO cases: US-Shrimp (sea turtle protection), EC-Asbestos (carcinogens), Brazil-Retreaded Tyres (environmental protection upheld by Appellate Body).</p>
+          </div>
+        </div>
+
+        <div class="accord-item">
+          <div class="accord-head" onclick="toggleAccord(this)">
+            Basel Convention & CITES
+            <span class="accord-arrow">▼</span>
+          </div>
+          <div class="accord-body">
+            <p><strong>Basel Convention (1989)</strong>: Controls transboundary movement of hazardous wastes. Prevents rich countries dumping e-waste, toxic waste in poor countries. India ratified it. Recent "plastic waste" amendment (Basel Convention + plastic, 2021).</p>
+            <p><strong>CITES (Convention on International Trade in Endangered Species)</strong>: Controls wildlife trade. Appendix I: banned trade. Appendix II: regulated. India is a party — protects tigers, rhinos, elephants.</p>
+          </div>
+        </div>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 Pollution Haven Hypothesis</div>
+          Theory: strict environmental regulations in developed countries push polluting industries to developing countries with lax standards. Developing countries become "pollution havens." Empirical evidence is mixed — India has attracted some polluting FDI, but also produces clean energy equipment. Race to the bottom vs race to the top in environmental standards.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END TRADE -->
+
+<!-- ===================== SECTION 5: WHAT YOU MISSED ===================== -->
+<div id="section-missed" class="section-panel">
+  <div class="section-header missed">
+    <div class="section-emoji">➕</div>
+    <div>
+      <div class="section-title">What You Missed</div>
+      <div class="section-desc">Important areas not in your core list — market structures, behavioral economics, game theory, public finance, and more.</div>
+      <div class="section-tags">
+        <span class="badge badge-advanced">Good to Know</span>
+        <span class="badge badge-deepdive">Some Deep-dive</span>
+        <span style="font-size:13px;color:var(--text-muted);">8 areas</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-nav">
+    <button class="sub-tab active" data-parent="missed" onclick="switchPanel('missed','mktstr')" data-panel="mktstr">Market Structures</button>
+    <button class="sub-tab" data-parent="missed" onclick="switchPanel('missed','behave')" data-panel="behave">Behavioural Economics</button>
+    <button class="sub-tab" data-parent="missed" onclick="switchPanel('missed','game')" data-panel="game">Game Theory</button>
+    <button class="sub-tab" data-parent="missed" onclick="switchPanel('missed','pubfin')" data-panel="pubfin">Public Finance</button>
+    <button class="sub-tab" data-parent="missed" onclick="switchPanel('missed','finmkt')" data-panel="finmkt">Financial Markets & RBI</button>
+    <button class="sub-tab" data-parent="missed" onclick="switchPanel('missed','devel')" data-panel="devel">Development Economics</button>
+    <button class="sub-tab" data-parent="missed" onclick="switchPanel('missed','growth')" data-panel="growth">Growth Theory</button>
+    <button class="sub-tab" data-parent="missed" onclick="switchPanel('missed','intfin')" data-panel="intfin">International Finance</button>
+  </div>
+
+  <!-- Panel: Market Structures -->
+  <div id="missed-mktstr" class="panel active">
+    <div class="card">
+      <div class="card-title">Market Structures — Overview <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p>How competitive a market is determines how firms behave and what prices/outputs result. Four main structures:</p>
+        <table>
+          <tr><th></th><th>Perfect Competition</th><th>Monopolistic Competition</th><th>Oligopoly</th><th>Monopoly</th></tr>
+          <tr><td><strong>No. of firms</strong></td><td>Many</td><td>Many</td><td>Few</td><td>One</td></tr>
+          <tr><td><strong>Product</strong></td><td>Homogeneous</td><td>Differentiated</td><td>Homo or Diff</td><td>Unique</td></tr>
+          <tr><td><strong>Price setting</strong></td><td>Price taker</td><td>Some control</td><td>Interdependent</td><td>Price maker</td></tr>
+          <tr><td><strong>Entry</strong></td><td>Free</td><td>Free</td><td>Barriers</td><td>Blocked</td></tr>
+          <tr><td><strong>Long-run profit</strong></td><td>Zero</td><td>Zero</td><td>Possible positive</td><td>Positive</td></tr>
+          <tr><td><strong>Indian example</strong></td><td>Wheat farmers (commodity market)</td><td>Restaurants, hairdressers</td><td>Telecom (Jio, Airtel, Vi), cement</td><td>Indian Railways (passenger rail)</td></tr>
+        </table>
+        <div class="formula-box">
+          <div class="f-label">Profit Maximisation Rule (All structures)</div>
+          MR = MC  (Marginal Revenue = Marginal Cost)
+          <br><br>
+          Perfect Competition: P = MR (horizontal demand curve)
+          Monopoly: MR < P (downward sloping demand → MR falls faster)
+          Monopoly: P* > MC → deadweight loss (welfare loss)
+        </div>
+        <div class="fyi-box">
+          <div class="fyi-label">💡 Telecom Oligopoly in India</div>
+          Post-Jio entry (2016): Industry went from 12+ players to 3 (Jio, Airtel, Vi). Classic oligopoly dynamics — price wars followed by consolidation. Now Jio and Airtel are dominant. TRAI monitors anti-competitive behaviour.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Behavioural -->
+  <div id="missed-behave" class="panel">
+    <div class="card">
+      <div class="card-title">Behavioural Economics <span class="badge badge-advanced">Advanced</span></div>
+      <div class="card-body">
+        <p>Classical economics assumes <em>rational</em> agents. Behavioural economics (Kahneman, Thaler, Tversky) shows real people are <em>predictably irrational</em>.</p>
+        <div class="term-grid">
+          <div class="term-card">
+            <div class="term-name">Loss Aversion</div>
+            <div class="term-def">Losses hurt about twice as much as equivalent gains feel good (Kahneman-Tversky). "Pain of losing ₹100 > joy of gaining ₹100." Explains why people hold losing stocks too long.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Anchoring</div>
+            <div class="term-def">First piece of information (anchor) disproportionately influences decisions. E.g., initial price shown in negotiations sets the anchor. MRP (Maximum Retail Price) in India is a deliberate anchor.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Nudge Theory</div>
+            <div class="term-def">Small changes in "choice architecture" can significantly change behaviour without restricting freedom. Richard Thaler (Nobel 2017). E.g., auto-enrolment in pension schemes; opt-out vs opt-in organ donation.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Bounded Rationality</div>
+            <div class="term-def">Herbert Simon: people don't maximise — they "satisfice" (find a good enough solution). Limited time, information, and cognitive capacity constrain optimal decision-making.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Present Bias</div>
+            <div class="term-def">People overvalue immediate rewards vs future rewards. Explains low savings rates, addiction, procrastination. Jan Dhan Yojana tried to address this through auto-saving mechanisms.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Framing Effect</div>
+            <div class="term-def">How a choice is presented changes the decision. "90% fat-free" vs "10% fat" → same thing, different perception. India's GST: 18% on non-AC restaurants vs 5% AC sounds very different but structure matters.</div>
+          </div>
+        </div>
+        <div class="fyi-box">
+          <div class="fyi-label">💡 India's Behavioural Policy</div>
+          Jan Dhan Yojana (nudge: easy zero-balance accounts) dramatically expanded banking. Aarogya Setu and CoWIN during COVID used nudges. The government's "Swacch Bharat" campaign attempted a social norm nudge on sanitation behaviours.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Game Theory -->
+  <div id="missed-game" class="panel">
+    <div class="card">
+      <div class="card-title">Game Theory — Basics <span class="badge badge-advanced">Advanced</span></div>
+      <div class="card-body">
+        <p>Game theory analyses strategic interactions between rational agents — where each person's outcome depends on others' decisions. Foundation of modern micro, IO, and international economics.</p>
+
+        <p><strong>Nash Equilibrium</strong>: A set of strategies where no player can improve their outcome by unilaterally changing their strategy, given the strategies of others. John Nash (Nobel 1994).</p>
+
+        <div class="example-box">
+          <div class="ex-label">Prisoner's Dilemma — Classic Game</div>
+          <table>
+            <tr><th></th><th>Player B: Cooperate</th><th>Player B: Defect</th></tr>
+            <tr><td><strong>A: Cooperate</strong></td><td>Both get 3 yrs (Good)</td><td>A: 10 yrs, B: 1 yr</td></tr>
+            <tr><td><strong>A: Defect</strong></td><td>A: 1 yr, B: 10 yrs</td><td>Both get 5 yrs (Nash Eq.)</td></tr>
+          </table>
+          Nash Equilibrium: Both Defect → both get 5 years. But if both cooperated, they'd each get only 3. Individual rationality leads to collectively worse outcome. Applies to: OPEC production cuts, India-Pakistan nuclear race, firm advertising wars.
+        </div>
+
+        <div class="term-grid">
+          <div class="term-card">
+            <div class="term-name">Dominant Strategy</div>
+            <div class="term-def">A strategy that is best regardless of what the other player does. In Prisoner's Dilemma, Defect is a dominant strategy for both.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Repeated Games</div>
+            <div class="term-def">When games are played repeatedly, cooperation becomes sustainable (Tit-for-Tat strategy). Explains cartels, diplomatic agreements, repeated business relationships.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Sequential Games</div>
+            <div class="term-def">One player moves first, others observe and respond. Solved by Backward Induction. Stackelberg model in oligopoly.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Cournot Duopoly</div>
+            <div class="term-def">Two firms choose quantities simultaneously. Nash equilibrium: each chooses best response to other's output. Total output: more than monopoly, less than perfect competition.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Public Finance -->
+  <div id="missed-pubfin" class="panel">
+    <div class="card">
+      <div class="card-title">Public Finance — Taxation & Public Goods <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <p><strong>Public goods</strong> are <em>non-rival</em> (one person's consumption doesn't reduce availability) and <em>non-excludable</em> (can't prevent someone from using it). Market fails to provide them adequately.</p>
+        <div class="grid-2">
+          <div class="term-card">
+            <div class="term-name">Pure Public Goods</div>
+            <div class="term-def">Non-rival + Non-excludable. Free-rider problem → under-provision. Examples: national defence, street lighting, lighthouse, clean air.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Merit Goods</div>
+            <div class="term-def">Society deems them deserving of more consumption than individuals would freely choose. Positive externality. Examples: education, healthcare, vaccines. Government subsidises or mandates them.</div>
+          </div>
+        </div>
+
+        <p><strong>Taxation in India</strong>:</p>
+        <table>
+          <tr><th>Type</th><th>Description</th><th>Indian Example</th></tr>
+          <tr><td>Direct Tax</td><td>Levied on income/wealth; paid directly by taxpayer</td><td>Income Tax, Corporate Tax, Capital Gains Tax</td></tr>
+          <tr><td>Indirect Tax</td><td>Levied on goods/services; passed on to consumers</td><td>GST, Customs Duty, Central Excise</td></tr>
+          <tr><td>Progressive</td><td>Higher income → higher rate</td><td>Income tax slabs (5%, 20%, 30%)</td></tr>
+          <tr><td>Regressive</td><td>Higher burden on lower income groups</td><td>GST on essentials (if not exempt)</td></tr>
+          <tr><td>Pigouvian Tax</td><td>Tax equal to marginal external cost</td><td>Carbon cess on coal; tobacco surcharge</td></tr>
+        </table>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 GST in India — July 2017</div>
+          Goods and Services Tax replaced 17+ central and state taxes. Dual structure: CGST + SGST (intra-state) or IGST (inter-state). 4 rate slabs: 5%, 12%, 18%, 28%. Essentials (food, medicine) mostly exempt or 0-5%. Luxury goods at 28% + cess. Aims to unify India's fragmented indirect tax system.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Financial Markets -->
+  <div id="missed-finmkt" class="panel">
+    <div class="card">
+      <div class="card-title">Money Supply & RBI's Monetary Policy Tools <span class="badge badge-core">Core</span></div>
+      <div class="card-body">
+        <div class="term-grid">
+          <div class="term-card">
+            <div class="term-name">M0 — Reserve Money</div>
+            <div class="term-def">Currency in circulation + Bankers' deposits with RBI. Also called "High-powered money" or monetary base. Directly controlled by RBI.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">M1 — Narrow Money</div>
+            <div class="term-def">Currency + Demand deposits (current/savings accounts). Most liquid measure of money supply.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">M3 — Broad Money</div>
+            <div class="term-def">M1 + Time deposits (FDs). The most comprehensive measure; what RBI typically tracks for monetary policy. India's M3 growth is closely watched.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Money Multiplier</div>
+            <div class="term-def">mm = M3/M0 = 1/CRR (simplified). If CRR = 4%, mm = 25. A ₹100 increase in base money → ₹2,500 increase in broad money via bank lending.</div>
+          </div>
+        </div>
+
+        <p><strong>RBI's Monetary Policy Tools</strong>:</p>
+        <table>
+          <tr><th>Tool</th><th>What it is</th><th>Effect</th></tr>
+          <tr><td><strong>Repo Rate</strong></td><td>Rate at which RBI lends to commercial banks (overnight, against securities)</td><td>↑ Repo → ↑ lending rates → ↓ borrowing → ↓ demand/inflation</td></tr>
+          <tr><td><strong>Reverse Repo Rate</strong></td><td>Rate at which banks park excess funds with RBI</td><td>Sets floor for interest rates; affects liquidity</td></tr>
+          <tr><td><strong>CRR (Cash Reserve Ratio)</strong></td><td>% of net demand & time liabilities banks must hold as cash with RBI</td><td>↑ CRR → banks have less to lend → ↓ money supply</td></tr>
+          <tr><td><strong>SLR (Statutory Liquidity Ratio)</strong></td><td>% of NDTL banks must hold in govt securities/gold/cash</td><td>Ensures banks are liquid; also absorbs govt borrowing</td></tr>
+          <tr><td><strong>OMOs (Open Market Operations)</strong></td><td>RBI buying/selling govt securities in the market</td><td>Buy: injects liquidity. Sell: absorbs liquidity.</td></tr>
+          <tr><td><strong>MSF (Marginal Standing Facility)</strong></td><td>Emergency borrowing from RBI at penalty rate (above repo)</td><td>Acts as ceiling for call money rate</td></tr>
+        </table>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 India's MPC (Monetary Policy Committee)</div>
+          Constituted in 2016. 6 members: 3 RBI officials (Governor has casting vote) + 3 external members appointed by government. Meets 6 times/year. Target: CPI 4% ± 2%. FY24: Held repo at 6.5% for several consecutive meetings amid disinflation path.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Development -->
+  <div id="missed-devel" class="panel">
+    <div class="card">
+      <div class="card-title">Development Economics <span class="badge badge-advanced">Advanced</span></div>
+      <div class="card-body">
+        <p>Development economics studies how low-income countries can transform their economies to achieve sustained growth, reduce poverty, and improve wellbeing.</p>
+
+        <div class="term-grid">
+          <div class="term-card">
+            <div class="term-name">HDI — Human Development Index</div>
+            <div class="term-def">Composite of: Life expectancy (health) + Education (mean + expected years of schooling) + GNI per capita (income). India's HDI: 0.644 (Medium Human Development, rank 134/193 in 2023). Created by UNDP.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Amartya Sen's Capability Approach</div>
+            <div class="term-def">Development is not about income — it's about expanding human "capabilities" (freedoms to live a life one values). Health, education, political freedom are ends in themselves, not just means. Foundation of HDI.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">MPI — Multidimensional Poverty Index</div>
+            <div class="term-def">UNDP + Oxford measure. 10 indicators across health, education, living standards. India's MPI headcount fell significantly 2015-2021 (415 million lifted out of MPI poverty, UNDP 2023).</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Structural Transformation</div>
+            <div class="term-def">Lewis model: shift of labour from low-productivity agriculture to high-productivity manufacturing/services. India's challenge: services-led growth without manufacturing transformation (unlike China's path).</div>
+          </div>
+        </div>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 India's Development Paradox</div>
+          India grew rapidly (6-8% GDP) but its social indicators lagged — called the "India paradox." High GDP growth didn't automatically translate to HDI gains. Schemes like PM-KISAN, Ayushman Bharat, Jal Jeevan Mission, PM Awas Yojana aim to directly address human development gaps.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Growth Theory -->
+  <div id="missed-growth" class="panel">
+    <div class="card">
+      <div class="card-title">Growth Theory — Solow & Beyond <span class="badge badge-deepdive">Deep-dive</span></div>
+      <div class="card-body">
+        <p>Growth theory asks: what determines long-run economic growth? Why are some countries rich and others poor?</p>
+        <p><strong>Solow Growth Model (1956)</strong>: Output depends on capital (K), labour (L), and technology (A). Key insights:</p>
+        <div class="formula-box">
+          <div class="f-label">Solow Production Function</div>
+          Y = A · F(K, L)    (A = Total Factor Productivity / technology)
+          <br>
+          In per capita terms: y = A · f(k)  (y = Y/L, k = K/L)
+          <br><br>
+          Steady State: Investment = Depreciation
+          s · f(k*) = (n + δ) · k*
+          (s = savings rate, n = population growth, δ = depreciation)
+          <br><br>
+          Convergence: Poor countries grow faster than rich countries (diminishing returns to capital)
+        </div>
+        <ul>
+          <li><strong>Diminishing returns to capital</strong>: Each additional unit of capital adds less output → growth slows → steady state</li>
+          <li><strong>Technology (A)</strong>: Only technological progress drives long-run growth per capita</li>
+          <li><strong>Convergence hypothesis</strong>: Poor countries should catch up to rich ones (conditional convergence — empirically partial)</li>
+        </ul>
+
+        <p><strong>Endogenous Growth Theory (Romer, 1986; Lucas, 1988)</strong>: Argues growth can be sustained through knowledge accumulation, human capital, R&D — which have increasing returns (not diminishing). Policy can permanently affect growth rates.</p>
+
+        <div class="example-box">
+          <div class="ex-label">🇮🇳 India's Growth Drivers</div>
+          Demographic dividend: large, young working-age population (till ~2040) → if employed productively, major growth driver. TFP growth: infrastructure investment, ease of doing business, digital transformation (India Stack, UPI). Structural transformation: moving workers from agriculture (low productivity) to manufacturing and services.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: International Finance -->
+  <div id="missed-intfin" class="panel">
+    <div class="card">
+      <div class="card-title">International Finance — IMF, World Bank & SDRs <span class="badge badge-advanced">Advanced</span></div>
+      <div class="card-body">
+        <div class="term-grid">
+          <div class="term-card">
+            <div class="term-name">IMF — International Monetary Fund</div>
+            <div class="term-def">Provides financial assistance to countries facing BoP crises. Conducts Article IV consultations. Sets conditions for loans (structural adjustment). India borrowed from IMF in 1966, 1981, 1991. India is now a net creditor to IMF.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">World Bank Group</div>
+            <div class="term-def">IBRD: loans to middle-income countries. IDA: concessional loans to poorest countries. India still borrows from IDA and IBRD for development projects (health, infrastructure).</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">SDR — Special Drawing Rights</div>
+            <div class="term-def">IMF's reserve asset — a basket of currencies (USD, EUR, CNY, JPY, GBP). Not a currency itself. Used for settlements between central banks. India's SDR allocation (2021): ~$17.86 bn as part of COVID-era $650 bn SDR allocation.</div>
+          </div>
+          <div class="term-card">
+            <div class="term-name">Currency Crisis</div>
+            <div class="term-def">Sudden depreciation due to speculative attacks or BoP stress. India's 1991 crisis: BoP crisis → IMF loan → LPG reforms. More recently: Lira crisis (Turkey), Rupee stress (2013 "taper tantrum", 2022).</div>
+          </div>
+        </div>
+
+        <div class="fyi-box">
+          <div class="fyi-label">💡 India 1991 — The Turning Point</div>
+          India's forex reserves fell to less than 2 weeks of import cover. India had to pledge gold to the Bank of England to get emergency loans. The crisis led to the New Economic Policy 1991 — LPG reforms (Liberalisation, Privatisation, Globalisation) under PM PV Narasimha Rao and FM Manmohan Singh. GDP grew from ~$320 bn (1991) to ~$3.5 trillion (2024).
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END MISSED -->
+
+</div><!-- end content-wrapper -->
+
+<div style="text-align:center;padding:24px;color:var(--text-muted);font-size:13px;border-top:1px solid var(--border);margin-top:20px;">
+  📊 Economics Hub · Built for structured learning from first principles to policy · Indian context throughout
+</div>
+
+<script>
+// ===== NAVIGATION =====
+function switchSection(section) {
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('section-' + section).classList.add('active');
+  document.querySelector('[data-section="' + section + '"]').classList.add('active');
+}
+
+function switchPanel(section, panel) {
+  const allPanels = document.querySelectorAll('#section-' + section + ' .panel');
+  allPanels.forEach(p => p.classList.remove('active'));
+  const allTabs = document.querySelectorAll('[data-parent="' + section + '"]');
+  allTabs.forEach(t => t.classList.remove('active'));
+  const targetPanel = document.getElementById(section + '-' + panel);
+  if (targetPanel) targetPanel.classList.add('active');
+  const targetTab = document.querySelector('[data-parent="' + section + '"][data-panel="' + panel + '"]');
+  if (targetTab) targetTab.classList.add('active');
+}
+
+// ===== ACCORDION =====
+function toggleAccord(head) {
+  const item = head.parentElement;
+  item.classList.toggle('open');
+}
+
+// ===== CALCULATORS =====
+
+// Elasticity
+function calcElasticity() {
+  const type = document.getElementById('elastType').value;
+  const v1 = parseFloat(document.getElementById('calcIn1').value);
+  const v2 = parseFloat(document.getElementById('calcIn2').value);
+  const res = document.getElementById('elastResult');
+  if (isNaN(v1) || isNaN(v2) || v2 === 0) {
+    res.innerHTML = '<span style="color:#f87171">Please enter valid numbers (denominator cannot be 0)</span>';
+    res.classList.add('show'); return;
+  }
+  const elasticity = v1 / v2;
+  const absE = Math.abs(elasticity).toFixed(3);
+  let interp = '';
+  if (type === 'ped') {
+    if (Math.abs(elasticity) > 1) interp = '📌 Elastic demand — a 1% price change causes more than 1% change in Qd. Total revenue moves opposite to price.';
+    else if (Math.abs(elasticity) === 1) interp = '📌 Unit elastic — proportional changes. TR unaffected by price change.';
+    else if (Math.abs(elasticity) < 1 && Math.abs(elasticity) > 0) interp = '📌 Inelastic demand — a 1% price change causes less than 1% change in Qd. Total revenue moves with price.';
+    else interp = '📌 Perfectly inelastic — quantity demanded does not respond to price at all.';
+  } else if (type === 'yed') {
+    if (elasticity > 1) interp = '📌 Luxury good — demand rises faster than income (YED > 1).';
+    else if (elasticity > 0 && elasticity <= 1) interp = '📌 Normal necessity — demand rises with income but less proportionally.';
+    else if (elasticity < 0) interp = '📌 Inferior good — demand falls as income rises.';
+  } else {
+    if (elasticity > 0) interp = '📌 Substitute goods — when price of B rises, demand for A rises.';
+    else if (elasticity < 0) interp = '📌 Complementary goods — when price of B rises, demand for A falls.';
+    else interp = '📌 Unrelated goods — no cross-price relationship.';
+  }
+  res.innerHTML = `<div class="result-value">${elasticity.toFixed(3)}</div><div class="result-label">Elasticity (|E| = ${absE})</div><div class="result-interp">${interp}</div>`;
+  res.classList.add('show');
+}
+
+// Update labels based on type
+document.getElementById('elastType').addEventListener('change', function() {
+  const l1 = document.getElementById('calcLabel1');
+  const l2 = document.getElementById('calcLabel2');
+  const v1 = document.getElementById('calcIn1');
+  const v2 = document.getElementById('calcIn2');
+  if (this.value === 'ped') {
+    l1.textContent = '% Change in Quantity Demanded'; l2.textContent = '% Change in Price';
+    v1.placeholder = 'e.g. -20'; v2.placeholder = 'e.g. 10';
+  } else if (this.value === 'yed') {
+    l1.textContent = '% Change in Quantity Demanded'; l2.textContent = '% Change in Income';
+    v1.placeholder = 'e.g. 15'; v2.placeholder = 'e.g. 10';
+  } else {
+    l1.textContent = '% Change in Qd of Good A'; l2.textContent = '% Change in Price of Good B';
+    v1.placeholder = 'e.g. 8'; v2.placeholder = 'e.g. 5';
+  }
+  document.getElementById('elastResult').classList.remove('show');
+});
+
+// GDP Deflator
+function calcGDPDeflator() {
+  const nom = parseFloat(document.getElementById('nominalGDP').value);
+  const real = parseFloat(document.getElementById('realGDP').value);
+  const res = document.getElementById('gdpResult');
+  if (isNaN(nom) || isNaN(real) || real === 0) {
+    res.innerHTML = '<span style="color:#f87171">Please enter valid numbers</span>';
+    res.classList.add('show'); return;
+  }
+  const deflator = (nom / real) * 100;
+  const inflStr = deflator > 100 ? `${(deflator - 100).toFixed(2)}% above base year prices (inflation)` : `${(100 - deflator).toFixed(2)}% below base year prices (deflation)`;
+  res.innerHTML = `<div class="result-value">${deflator.toFixed(2)}</div><div class="result-label">GDP Deflator</div><div class="result-interp">📌 Prices are ${inflStr}. Real GDP = ₹${real.toLocaleString('en-IN')} cr represents true output growth.</div>`;
+  res.classList.add('show');
+}
+
+// CPI
+function calcCPI() {
+  const base = parseFloat(document.getElementById('cpiBase').value);
+  const curr = parseFloat(document.getElementById('cpiCurr').value);
+  const res = document.getElementById('cpiResult');
+  if (isNaN(base) || isNaN(curr) || base === 0) {
+    res.innerHTML = '<span style="color:#f87171">Please enter valid numbers</span>';
+    res.classList.add('show'); return;
+  }
+  const cpi = (curr / base) * 100;
+  const inflation = ((curr - base) / base) * 100;
+  const color = inflation > 6 ? '#f87171' : inflation > 4 ? '#fbbf24' : '#34d399';
+  res.innerHTML = `<div class="result-value">${cpi.toFixed(2)}</div><div class="result-label">CPI Index Value</div><div class="result-interp" style="color:${color}">📌 Inflation rate: ${inflation.toFixed(2)}% — ${inflation > 6 ? 'Above RBI upper band (6%)' : inflation >= 2 ? 'Within RBI target band (2–6%)' : 'Below RBI lower band (2%)'}.</div>`;
+  res.classList.add('show');
+}
+
+// Comparative Advantage
+function calcComparative() {
+  const a1 = parseFloat(document.getElementById('ca_a1').value);
+  const b1 = parseFloat(document.getElementById('ca_b1').value);
+  const a2 = parseFloat(document.getElementById('ca_a2').value);
+  const b2 = parseFloat(document.getElementById('ca_b2').value);
+  const c1 = document.getElementById('ca_c1').value || 'Country 1';
+  const c2 = document.getElementById('ca_c2').value || 'Country 2';
+  const res = document.getElementById('caResult');
+  if ([a1,b1,a2,b2].some(isNaN)) {
+    res.innerHTML = '<span style="color:#f87171">Please fill all fields</span>';
+    res.classList.add('show'); return;
+  }
+  const oc_a1 = b1/a1; // OC of good A in C1 (how much B foregone)
+  const oc_a2 = b2/a2;
+  const oc_b1 = a1/b1;
+  const oc_b2 = a2/b2;
+  const absAdv_A = a1 < a2 ? c1 : c2;
+  const absAdv_B = b1 < b2 ? c1 : c2;
+  const compAdv_A = oc_a1 < oc_a2 ? c1 : c2;
+  const compAdv_B = oc_b1 < oc_b2 ? c1 : c2;
+  res.innerHTML = `
+    <table>
+      <tr><th></th><th>OC of Good A (in units of B)</th><th>OC of Good B (in units of A)</th></tr>
+      <tr><td><strong>${c1}</strong></td><td>${oc_a1.toFixed(2)}</td><td>${oc_b1.toFixed(2)}</td></tr>
+      <tr><td><strong>${c2}</strong></td><td>${oc_a2.toFixed(2)}</td><td>${oc_b2.toFixed(2)}</td></tr>
+    </table>
+    <div class="result-interp">
+      📌 Absolute Advantage — Good A: <strong>${absAdv_A}</strong> | Good B: <strong>${absAdv_B}</strong><br>
+      📌 Comparative Advantage — Good A: <strong>${compAdv_A}</strong> (lower OC: ${Math.min(oc_a1,oc_a2).toFixed(2)}) | Good B: <strong>${compAdv_B}</strong> (lower OC: ${Math.min(oc_b1,oc_b2).toFixed(2)})<br>
+      ✅ Both countries gain from trade: ${c1} should specialise in <strong>${oc_a1 < oc_a2 ? 'Good A' : 'Good B'}</strong>, ${c2} in <strong>${oc_a2 <= oc_a1 ? 'Good A' : 'Good B'}</strong>.
+    </div>`;
+  res.classList.add('show');
+}
+
+// ===== SEARCH =====
+function searchContent(query) {
+  // Remove previous highlights
+  document.querySelectorAll('.search-match').forEach(el => {
+    const parent = el.parentNode;
+    parent.replaceChild(document.createTextNode(el.textContent), el);
+    parent.normalize();
+  });
+  if (!query || query.length < 2) return;
+  const q = query.toLowerCase();
+  const walker = document.createTreeWalker(document.querySelector('.content-wrapper'), NodeFilter.SHOW_TEXT, null, false);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    const idx = node.textContent.toLowerCase().indexOf(q);
+    if (idx === -1 || !node.parentNode || node.parentNode.classList.contains('search-match')) return;
+    const before = node.textContent.slice(0, idx);
+    const match = node.textContent.slice(idx, idx + query.length);
+    const after = node.textContent.slice(idx + query.length);
+    const span = document.createElement('span');
+    span.className = 'search-match';
+    span.textContent = match;
+    const frag = document.createDocumentFragment();
+    if (before) frag.appendChild(document.createTextNode(before));
+    frag.appendChild(span);
+    if (after) frag.appendChild(document.createTextNode(after));
+    node.parentNode.replaceChild(frag, node);
+    span.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    const inp = document.getElementById('searchInput');
+    inp.value = '';
+    searchContent('');
+  }
+});
+
+// ===== PROFIT CALCULATOR =====
+function calcProfit() {
+  const tfc = parseFloat(document.getElementById('tfc').value);
+  const tvc = parseFloat(document.getElementById('tvc').value);
+  const q   = parseFloat(document.getElementById('qty_prod').value);
+  const p   = parseFloat(document.getElementById('price_prod').value);
+  const res = document.getElementById('profitResult');
+  if ([tfc,tvc,q,p].some(v => isNaN(v) || v < 0) || q === 0) {
+    res.innerHTML = '<span style="color:#f87171">Please enter valid positive numbers. Quantity cannot be 0.</span>';
+    res.classList.add('show'); return;
+  }
+  const tc = tfc + tvc;
+  const tr = p * q;
+  const profit = tr - tc;
+  const atc = tc / q;
+  const avc = tvc / q;
+  const afc = tfc / q;
+  const mc_approx = tvc / q; // approximate MC = AVC for linear VC
+  let status, color;
+  if (p > atc) { status = '✅ Supernormal Profit — earning above normal return'; color = '#34d399'; }
+  else if (Math.abs(p - atc) < 0.01) { status = '⚖️ Break-even — Normal profit only (economic profit = 0)'; color = '#fbbf24'; }
+  else if (p > avc) { status = '⚠️ Loss, but should continue — price covers variable costs (AVC < P < ATC)'; color = '#fbbf24'; }
+  else { status = '🛑 Shut down — price below AVC, every unit adds to losses'; color = '#f87171'; }
+  res.innerHTML = `
+    <table>
+      <tr><th>Metric</th><th>Value</th></tr>
+      <tr><td>Total Revenue (TR = P×Q)</td><td>₹${tr.toLocaleString('en-IN')}</td></tr>
+      <tr><td>Total Cost (TC = TFC+TVC)</td><td>₹${tc.toLocaleString('en-IN')}</td></tr>
+      <tr><td>Profit / Loss (TR−TC)</td><td style="color:${profit>=0?'#34d399':'#f87171'};font-weight:700">₹${profit.toLocaleString('en-IN')}</td></tr>
+      <tr><td>ATC (per unit)</td><td>₹${atc.toFixed(2)}</td></tr>
+      <tr><td>AVC (per unit)</td><td>₹${avc.toFixed(2)}</td></tr>
+      <tr><td>AFC (per unit)</td><td>₹${afc.toFixed(2)}</td></tr>
+    </table>
+    <div class="result-interp" style="color:${color};margin-top:10px">${status}</div>`;
+  res.classList.add('show');
+}
+
+// ===== MULTIPLIER CALCULATOR =====
+function calcMultiplier() {
+  const mpc = parseFloat(document.getElementById('mpc_val').value);
+  const dg  = parseFloat(document.getElementById('delta_g').value);
+  const res = document.getElementById('multResult');
+  if (isNaN(mpc) || mpc <= 0 || mpc >= 1 || isNaN(dg)) {
+    res.innerHTML = '<span style="color:#f87171">MPC must be between 0 and 1. Enter a valid spending change.</span>';
+    res.classList.add('show'); return;
+  }
+  const mps = 1 - mpc;
+  const k   = 1 / mps;
+  const deltaY = k * dg;
+  const taxMult = -mpc / mps;
+  res.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px;">
+      <div><div class="result-value">${k.toFixed(2)}</div><div class="result-label">Spending Multiplier (k = 1/MPS)</div></div>
+      <div><div class="result-value">${taxMult.toFixed(2)}</div><div class="result-label">Tax Multiplier (−MPC/MPS)</div></div>
+    </div>
+    <div class="result-interp">
+      📌 MPS (Marginal Propensity to Save) = ${mps.toFixed(2)}<br>
+      📌 A ₹${Number(dg).toLocaleString('en-IN')} cr increase in government spending →
+         <strong>ΔGDP = ₹${deltaY.toLocaleString('en-IN', {maximumFractionDigits:0})} cr</strong><br>
+      📌 An equivalent ₹${Number(dg).toLocaleString('en-IN')} cr <em>tax cut</em> → ΔGDP = ₹${Math.abs(taxMult*dg).toLocaleString('en-IN', {maximumFractionDigits:0})} cr (less powerful than direct spending because part of the cut is saved)<br>
+      📌 Balanced Budget Multiplier = 1 (equal ↑G and ↑T leaves ΔGDP = ΔG)
+    </div>`;
+  res.classList.add('show');
+}
+
+// ===== TERMS OF TRADE CALCULATOR =====
+function calcToT() {
+  const ec = parseFloat(document.getElementById('epi_curr').value);
+  const ic = parseFloat(document.getElementById('ipi_curr').value);
+  const eb = parseFloat(document.getElementById('epi_base').value);
+  const ib = parseFloat(document.getElementById('ipi_base').value);
+  const res = document.getElementById('totResult');
+  if (isNaN(ec) || isNaN(ic) || ic === 0) {
+    res.innerHTML = '<span style="color:#f87171">Please enter at least current Export and Import Price Indices.</span>';
+    res.classList.add('show'); return;
+  }
+  const totCurr = (ec / ic) * 100;
+  let changeStr = '';
+  if (!isNaN(eb) && !isNaN(ib) && ib !== 0) {
+    const totBase = (eb / ib) * 100;
+    const chg = totCurr - totBase;
+    const dir = chg > 0 ? '📈 Improved (favourable)' : chg < 0 ? '📉 Deteriorated (unfavourable)' : '→ Unchanged';
+    changeStr = `<br>Base year ToT: ${totBase.toFixed(2)} | Change: ${chg > 0 ? '+' : ''}${chg.toFixed(2)} — <strong>${dir}</strong>`;
+  }
+  const status = totCurr > 100 ? '✅ Favourable — exports fetch more than imports cost' : totCurr < 100 ? '⚠️ Unfavourable — exports buy less than imports cost' : '⚖️ Neutral';
+  res.innerHTML = `<div class="result-value">${totCurr.toFixed(2)}</div><div class="result-label">Terms of Trade Index</div><div class="result-interp">📌 ${status}${changeStr}</div>`;
+  res.classList.add('show');
+}
+</script>
+</body>
+</html>
